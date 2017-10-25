@@ -1,9 +1,9 @@
-export const ApiDataURI = Object.freeze({
+export const ApiDataPath = Object.freeze({
   CONFIG: '/me',
   VIZ: '/viz'
 });
 
-export const ApiVersionURI = Object.freeze({
+export const ApiVersionPath = Object.freeze({
   API_DEFAULT_URI: 'api/v3',
   API_V1_URI: 'api/v1',
   API_V2_URI: 'api/v2',

@@ -1,9 +1,8 @@
-/* global describe, it, before, after */
+/* global describe, it, beforeEach, afterEach */
 
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import fetch from 'node-fetch';
 import { AuthenticatedClient } from '../src/index.js';
 
 const BASE_URL = 'https://matallo.carto.com';
@@ -30,7 +29,8 @@ describe('AuthenticatedClient', function () {
     chai.use(sinonChai);
     this.sinon = sandbox = sinon.sandbox.create();
 
-    AuthenticatedClient.setStaticConfig(StaticConfig);
+    AuthenticatedClient
+      .setStaticConfig(StaticConfig);
   });
 
   afterEach(function () {
@@ -40,7 +40,7 @@ describe('AuthenticatedClient', function () {
   describe('.getConfig', () => {
     it('should get user config', function (done) {
       const fetchResponseStub = sandbox
-        .stub(fetch, 'Promise')
+        .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
       AuthenticatedClient
@@ -54,7 +54,7 @@ describe('AuthenticatedClient', function () {
 
     it('should return error if the request fails', function (done) {
       const fetchErrorStub = sandbox
-        .stub(fetch, 'Promise')
+        .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
       AuthenticatedClient.setStaticConfig(StaticConfig)

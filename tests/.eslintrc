@@ -5,6 +5,9 @@
     "browser": true,
     "jasmine": true
   },
+  "plugins": [
+    "chai-friendly"
+  ],
   "globals": {
     "__ENV__": true,
     "fetch": true
@@ -12,6 +15,8 @@
   "rules": {
     "camelcase": "off",
     "no-mixed-operators": "off",
-    "no-useless-escape": "off"
+    "no-useless-escape": "off",
+    "no-unused-expressions": 0,
+    "chai-friendly/no-unused-expressions": 2
   }
 }

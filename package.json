@@ -6,8 +6,8 @@
   "scripts": {
     "build": "webpack --env dev && webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
-    "test": "mocha --compilers --no-deprecation js:babel-core/register --colors ./tests/*.spec.js",
-    "test:watch": "mocha --compilers --no-deprecation js:babel-core/register --colors -w ./tests/*.spec.js"
+    "test:build": "webpack --watch --config webpack.test.config.js",
+    "test:server": "webpack-dev-server --config webpack.test.config.js --open"
   },
   "author": {
     "name": "CARTO",
@@ -34,6 +34,7 @@
     "eslint-config-semistandard": "^11.0.0",
     "eslint-config-standard": "^10.2.1",
     "eslint-loader": "^1.9.0",
+    "eslint-plugin-chai-friendly": "^0.4.0",
     "eslint-plugin-destructuring": "^2.1.0",
     "eslint-plugin-import": "^2.7.0",
     "eslint-plugin-node": "^5.2.0",
@@ -41,17 +42,16 @@
     "eslint-plugin-standard": "^3.0.1",
     "location-href": "^1.0.0",
     "mocha": "^4.0.1",
+    "mocha-loader": "^1.1.1",
     "mocha-phantomjs": "^4.1.0",
+    "mocha-webpack": "^0.7.0",
     "node-fetch": "^1.7.1",
     "path": "^0.12.7",
     "requirejs": "^2.3.5",
     "sinon": "^4.0.1",
     "sinon-chai": "^2.14.0",
     "webpack": "^3.8.1",
+    "webpack-dev-server": "^2.9.3",
     "yargs": "^9.0.1"
-  },
-  "dependencies": {
-    "node-fetch": "1.7.1",
-    "whatwg-fetch": "^2.0.3"
   }
 }

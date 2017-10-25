@@ -1,2 +1,4 @@
-dist
+.DS_Store
 node_modules
+tests/test.bundle.js
+tests/test.bundle.js.map

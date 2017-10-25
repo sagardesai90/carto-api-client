@@ -1,11 +1,11 @@
-import { ApiDataURI, ApiVersionURI } from './uris';
+import { ApiDataPath, ApiVersionPath } from './paths';
 
 export default {
   getConfigPath () {
-    return `${ApiVersionURI.API_V3_URI}${ApiDataURI.CONFIG}`;
+    return `${ApiVersionPath.API_V3_URI}${ApiDataPath.CONFIG}`;
   },
 
   getVizPath (viz) {
-    return `${ApiVersionURI.API_V1_URI}${ApiDataURI.VIZ}`;
+    return `${ApiVersionPath.API_V1_URI}${ApiDataPath.VIZ}`;
   }
 };

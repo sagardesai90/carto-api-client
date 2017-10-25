@@ -1,9 +1,7 @@
-import fetch from 'node-fetch';
-
-import { ApiVersionURI } from '../apis/uris';
+import { ApiVersionPath } from '../apis/paths';
 
 export default {
-  apiURI: ApiVersionURI.API_DEFAULT_URI,
+  apiPath: ApiVersionPath.API_DEFAULT_Path,
 
   staticConfig: {},
 
@@ -23,8 +21,8 @@ export default {
     return this.request('delete', ...args);
   },
 
-  setApiURI (apiURI) {
-    this.apiURI = apiURI;
+  setApiPath (apiPath) {
+    this.apiPath = apiPath;
 
     return this;
   },
@@ -47,21 +45,24 @@ export default {
 
   addHeaders (options, method, additional) {
     Object.assign(options, {
+      method: method.toUpperCase(),
       headers: {
-        'Content-Type': 'application/json; charset=utf-8'
+        'Accept': 'application/json',
+        'Content-Type': 'application/json; charset=utf-8',
+        'Cache': 'no-cache'
       },
-      method: method.toUpperCase()
+      credentials: 'include'
     });
 
     return {...additional, ...options};
   },
 
-  makeRelativeURI (parts) {
+  makeRelativePath (parts) {
     return `${parts.join('/')}`;
   },
 
-  makeAbsoluteURI (relativeURI) {
-    return `${this.apiURI}${relativeURI}`;
+  makeAbsolutePath (relativePath) {
+    return `${this.apiPath}${relativePath}`;
   },
 
   getAssetsBaseUrl () {
@@ -70,7 +71,7 @@ export default {
 
   request (method, uriParts, options = {}) {
     const baseUrl = this.staticConfig.baseUrl;
-    const url = this.makeRelativeURI(uriParts);
+    const url = this.makeRelativePath(uriParts);
 
     this.addHeaders(options, method);
 
