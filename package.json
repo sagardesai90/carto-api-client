@@ -1,6 +1,6 @@
 {
   "name": "carto-node",
-  "version": "1.0.0",
+  "version": "0.0.1",
   "description": "Client for the CARTO api",
   "main": "dist/carto-node.js",
   "scripts": {
