@@ -37,7 +37,9 @@ JS
 
 ```js
 var Carto = require('carto-node');
-var client = Carto.AuthenticatedClient.setStaticConfig(StaticConfig);
+var client = Carto.AuthenticatedClient.setStaticConfig({
+  baseUrl: 'foobar.com'
+});
 
 client.getConfig()
   .then(function (data) {
@@ -52,7 +54,9 @@ ES6
 
 ```js
 import Carto from 'carto-node';
-const client = Carto.AuthenticatedClient.setStaticConfig(StaticConfig);
+const client = Carto.AuthenticatedClient.setStaticConfig({
+  baseUrl: 'foobar.com'
+});
 
 client.getConfig()
   .then((data) => {
@@ -71,7 +75,7 @@ Browser
 
 ## Browser Support
 
-This library uses a **fetch** polyfill: (whatwg-fetch)[https://github.com/github/fetch)
+This library uses a **fetch** polyfill: [whatwg-fetch](https://github.com/github/fetch)
 
 ## Documentation
 
