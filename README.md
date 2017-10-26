@@ -69,6 +69,15 @@ Browser
 <script type="text/javascript" src="/carto-node/dist/carto-node.js"></script>
 ```
 
+## Browser Support
 
-Node
-* In order to use it with Node, do not forget to import/require a 'fetch' module (for instance, from [node-fetch](https://www.npmjs.com/package/node-fetch))
+This library uses a **fetch** polyfill: (whatwg-fetch)[https://github.com/github/fetch)
+
+## Documentation
+
+### Config
+
+### Visualization
+
+#### Parameters
+*
