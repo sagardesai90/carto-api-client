@@ -1,4 +1,5 @@
 import { ApiVersionPath } from '../apis/paths';
+import 'whatwg-fetch';
 
 export default {
   apiPath: ApiVersionPath.API_DEFAULT_Path,

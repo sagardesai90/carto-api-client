@@ -1,7 +1,5 @@
 const path = require('path');
 
-let plugins = [];
-
 const config = {
   entry: path.join(__dirname, '/tests/test.js'),
 
@@ -33,9 +31,7 @@ const config = {
       path.resolve('./src')
     ],
     extensions: ['.json', '.js']
-  },
-
-  plugins: plugins
+  }
 };
 
 module.exports = config;

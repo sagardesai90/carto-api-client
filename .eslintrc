@@ -5,13 +5,19 @@
     "browser": true,
     "jasmine": true
   },
+  "plugins": [
+    "chai-friendly"
+  ],
   "globals": {
     "__ENV__": true,
-    "fetch": true
+    "fetch": false
   },
   "rules": {
     "camelcase": "off",
     "no-mixed-operators": "off",
-    "no-useless-escape": "off"
+    "no-useless-escape": "off",
+    "no-unused-expressions": 0,
+    "no-global-assign": "error",
+    "chai-friendly/no-unused-expressions": 2
   }
 }
