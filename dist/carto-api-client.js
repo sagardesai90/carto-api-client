@@ -2,11 +2,11 @@
 	if(typeof exports === 'object' && typeof module === 'object')
 		module.exports = factory();
 	else if(typeof define === 'function' && define.amd)
-		define("carto-node", [], factory);
+		define("carto-api-client", [], factory);
 	else if(typeof exports === 'object')
-		exports["carto-node"] = factory();
+		exports["carto-api-client"] = factory();
 	else
-		root["carto-node"] = factory();
+		root["carto-api-client"] = factory();
 })(this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
@@ -84,11 +84,15 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
 var _paths = __webpack_require__(1);
 
-__webpack_require__(3);
+var _utils = __webpack_require__(3);
+
+var _utils2 = _interopRequireDefault(_utils);
+
+__webpack_require__(5);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -135,36 +139,16 @@ exports.default = {
 
     return this;
   },
-  setClientConfig: function setClientConfig(location) {
+  setClientBaseUrlFromLocation: function setClientBaseUrlFromLocation(location) {
     var host = location.host,
         protocol = location.protocol,
         href = location.href;
 
-    var regExp = href.match(/(\/(u|user)\/[a-z0-9\-]+)\//);
-    var path = regExp && regExp[1] || '';
+    var PATH = _utils2.default.getPathFromHref(href);
 
-    this.staticConfig.baseUrl = protocol + '//' + host + path;
+    this.staticConfig.baseUrl = protocol + '//' + host + PATH;
 
     return this;
-  },
-  addHeaders: function addHeaders(options, method, additional) {
-    Object.assign(options, {
-      method: method.toUpperCase(),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-        'Cache': 'no-cache'
-      },
-      credentials: 'include'
-    });
-
-    return _extends({}, additional, options);
-  },
-  makeRelativePath: function makeRelativePath(parts) {
-    return '' + parts.join('/');
-  },
-  makeAbsolutePath: function makeAbsolutePath(relativePath) {
-    return '' + this.apiPath + relativePath;
   },
   getAssetsBaseUrl: function getAssetsBaseUrl() {
     return this.staticConfig.baseUrl;
@@ -173,11 +157,12 @@ exports.default = {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     var baseUrl = this.staticConfig.baseUrl;
-    var url = this.makeRelativePath(uriParts);
+    var url = _utils2.default.makeRelativePath(uriParts);
+    var REQUEST_PATH = baseUrl + '/' + url;
 
-    this.addHeaders(options, method);
+    _utils2.default.addHeaders(options, method);
 
-    return fetch(baseUrl + '/' + url, options).then(function (response) {
+    return fetch(REQUEST_PATH, options).then(function (response) {
       return response.json();
     });
   }
@@ -195,7 +180,9 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 var ApiDataPath = exports.ApiDataPath = Object.freeze({
+  COLUMNS: '/columns',
   CONFIG: '/me',
+  TABLES: '/tables',
   VIZ: '/viz'
 });
 
@@ -204,6 +191,13 @@ var ApiVersionPath = exports.ApiVersionPath = Object.freeze({
   API_V1_URI: 'api/v1',
   API_V2_URI: 'api/v2',
   API_V3_URI: 'api/v3'
+});
+
+var Paths = exports.Paths = Object.freeze({
+  COLUMNS: ApiDataPath.COLUMNS,
+  CONFIG: '' + ApiVersionPath.API_V3_URI + ApiDataPath.CONFIG,
+  TABLES: '' + ApiVersionPath.API_V1_URI + ApiDataPath.TABLES,
+  VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ
 });
 
 /***/ }),
@@ -222,7 +216,7 @@ var _public = __webpack_require__(0);
 
 var _public2 = _interopRequireDefault(_public);
 
-var _authenticated = __webpack_require__(4);
+var _authenticated = __webpack_require__(6);
 
 var _authenticated2 = _interopRequireDefault(_authenticated);
 
@@ -233,6 +227,64 @@ exports.AuthenticatedClient = _authenticated2.default;
 
 /***/ }),
 /* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
+var _request = __webpack_require__(4);
+
+var USER_REGEX = /(\/(u|user)\/[a-z0-9\-]+)\//;
+
+exports.default = {
+  addHeaders: function addHeaders(options, method, additional) {
+    Object.assign(options, {
+      method: method.toUpperCase(),
+      headers: _request.Request.Default.HEADERS,
+      credentials: _request.Request.Default.CREDENTIALS
+    });
+
+    return _extends({}, additional, options);
+  },
+  makeRelativePath: function makeRelativePath(parts) {
+    return '' + parts.join('/');
+  },
+  getPathFromHref: function getPathFromHref(href) {
+    var regExp = href.match(USER_REGEX);
+    return regExp && regExp[1] || '';
+  }
+};
+module.exports = exports['default'];
+
+/***/ }),
+/* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var Request = exports.Request = Object.freeze({
+  Default: Object.freeze({
+    HEADERS: Object.freeze({
+      'Accept': 'application/json',
+      'Content-Type': 'application/json; charset=utf-8',
+      'Cache': 'no-cache'
+    }),
+    CREDENTIALS: 'include'
+  })
+});
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -699,7 +751,7 @@ exports.AuthenticatedClient = _authenticated2.default;
 
 
 /***/ }),
-/* 4 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -715,59 +767,54 @@ var _public = __webpack_require__(0);
 
 var _public2 = _interopRequireDefault(_public);
 
-var _index = __webpack_require__(5);
+var _paths = __webpack_require__(1);
 
-var _index2 = _interopRequireDefault(_index);
+var _paths2 = _interopRequireDefault(_paths);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 exports.default = _extends({}, _public2.default, {
-  getConfig: function getConfig() {
-    var CONFIG_PATH = _index2.default.getConfigPath();
-    return this.get([CONFIG_PATH]);
-  },
-  getVisualization: function getVisualization(vizUrl, params) {
-    var VIZ_API_PATH = _index2.default.getVizPath();
-    var uriParams = this.paramsToURI(params);
+  getConfig: function getConfig(params) {
+    var URI_PARAMS = params ? this.paramsToURI(params) : {};
 
-    return this.get([VIZ_API_PATH, vizUrl, uriParams]);
+    return this.get([_paths2.default.CONFIG, URI_PARAMS]);
   },
-  getDerivedMaps: function getDerivedMaps(mapsNumber) {
-    var VIZ_API_PATH = _index2.default.getVizPath();
-    var uriParams = this.paramsToURI({
-      per_page: mapsNumber,
-      type: 'derived'
-    });
+  getVisualization: function getVisualization(vizID, params) {
+    var VIZ_PATH = '/' + vizID;
+    var URI_PARAMS = this.paramsToURI(params);
 
-    return this.get([VIZ_API_PATH, uriParams]);
+    return this.get([_paths2.default.VIZ, VIZ_PATH, URI_PARAMS]);
+  },
+  getTable: function getTable(name, params) {
+    var NAME_PATH = '/' + name;
+    var URI_PARAMS = this.paramsToURI(params);
+
+    return this.get([_paths2.default.TABLES, NAME_PATH, URI_PARAMS]);
+  },
+  getTableColumns: function getTableColumns(name, params) {
+    var NAME_PATH = '/' + name;
+    var URI_PARAMS = this.paramsToURI(params);
+
+    return this.get([_paths2.default.TABLES, NAME_PATH, _paths2.default.COLUMNS, URI_PARAMS]);
+  },
+  deleteUser: function deleteUser(payload) {
+    var OPTIONS = {
+      data: JSON.stringify(payload),
+      dataType: 'json'
+    };
+    return this.delete([_paths2.default.CONFIG], OPTIONS);
+  },
+  updateUser: function updateUser(payload) {
+    var OPTIONS = {
+      data: JSON.stringify(payload),
+      dataType: 'json'
+    };
+    return this.put([_paths2.default.CONFIG], OPTIONS);
   }
 });
-module.exports = exports['default'];
-
-/***/ }),
-/* 5 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _paths = __webpack_require__(1);
-
-exports.default = {
-  getConfigPath: function getConfigPath() {
-    return '' + _paths.ApiVersionPath.API_V3_URI + _paths.ApiDataPath.CONFIG;
-  },
-  getVizPath: function getVizPath(viz) {
-    return '' + _paths.ApiVersionPath.API_V1_URI + _paths.ApiDataPath.VIZ;
-  }
-};
 module.exports = exports['default'];
 
 /***/ })
 /******/ ]);
 });
-//# sourceMappingURL=carto-node.js.map
+//# sourceMappingURL=carto-api-client.js.map

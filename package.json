@@ -1,8 +1,8 @@
 {
-  "name": "carto-node",
+  "name": "carto-api-client",
   "version": "0.0.1",
   "description": "Client for the Builder backend API",
-  "main": "dist/carto-node.js",
+  "main": "dist/carto-api-client.js",
   "scripts": {
     "build": "webpack --env dev && webpack --env build",
     "dev": "webpack --progress --colors --watch --env dev",
@@ -17,7 +17,7 @@
   "license": "BSD-3-Clause",
   "repository": {
     "type": "git",
-    "url": "https://github.com/cartodb/carto-node.git"
+    "url": "https://github.com/cartodb/carto-api-client.git"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

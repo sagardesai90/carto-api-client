@@ -1,4 +1,6 @@
-import { ApiVersionPath } from '../apis/paths';
+import { ApiVersionPath } from '../constants/paths';
+import Utils from '../utils/utils';
+
 import 'whatwg-fetch';
 
 export default {
@@ -34,36 +36,13 @@ export default {
     return this;
   },
 
-  setClientConfig (location) {
+  setClientBaseUrlFromLocation (location) {
     const { host, protocol, href } = location;
-    const regExp = href.match(/(\/(u|user)\/[a-z0-9\-]+)\//);
-    const path = (regExp && regExp[1]) || '';
+    const PATH = Utils.getPathFromHref(href);
 
-    this.staticConfig.baseUrl = `${protocol}//${host}${path}`;
+    this.staticConfig.baseUrl = `${protocol}//${host}${PATH}`;
 
     return this;
-  },
-
-  addHeaders (options, method, additional) {
-    Object.assign(options, {
-      method: method.toUpperCase(),
-      headers: {
-        'Accept': 'application/json',
-        'Content-Type': 'application/json; charset=utf-8',
-        'Cache': 'no-cache'
-      },
-      credentials: 'include'
-    });
-
-    return {...additional, ...options};
-  },
-
-  makeRelativePath (parts) {
-    return `${parts.join('/')}`;
-  },
-
-  makeAbsolutePath (relativePath) {
-    return `${this.apiPath}${relativePath}`;
   },
 
   getAssetsBaseUrl () {
@@ -72,11 +51,12 @@ export default {
 
   request (method, uriParts, options = {}) {
     const baseUrl = this.staticConfig.baseUrl;
-    const url = this.makeRelativePath(uriParts);
+    const url = Utils.makeRelativePath(uriParts);
+    const REQUEST_PATH = `${baseUrl}/${url}`;
 
-    this.addHeaders(options, method);
+    Utils.addHeaders(options, method);
 
-    return fetch(`${baseUrl}/${url}`, options)
+    return fetch(REQUEST_PATH, options)
       .then(response => response.json());
   }
 };

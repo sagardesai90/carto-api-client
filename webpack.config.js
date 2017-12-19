@@ -3,7 +3,7 @@ const UglifyJsPlugin = webpack.optimize.UglifyJsPlugin;
 const path = require('path');
 const env = require('yargs').argv.env;
 
-const libraryName = 'carto-node';
+const libraryName = 'carto-api-client';
 
 const uglifySettings = {
   minimize: true
