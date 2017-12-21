@@ -1,9 +1,6 @@
 import { Utils } from '../utils/utils';
 
-import polyfill from 'es6-promise';
-import 'isomorphic-fetch';
-
-polyfill();
+import 'whatwg-fetch';
 
 /**
  * Carto Public Client
