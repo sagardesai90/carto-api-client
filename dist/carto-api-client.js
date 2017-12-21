@@ -84,23 +84,46 @@ Object.defineProperty(exports, "__esModule", {
   value: true
 });
 
-var _paths = __webpack_require__(1);
-
-var _utils = __webpack_require__(3);
+var _utils = __webpack_require__(1);
 
 var _utils2 = _interopRequireDefault(_utils);
 
-__webpack_require__(5);
+__webpack_require__(4);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
-exports.default = {
-  apiPath: _paths.ApiVersionPath.API_DEFAULT_Path,
+/**
+ * Carto Public Client
+ *
+ * @param {Object} staticConfig
+ * @param {string} staticConfig.baseUrl - User base url
+ *
+ * @constructor
+ * @return {PublicClient}
+ */
 
+exports.default = {
   staticConfig: {},
 
+  /**
+   * Send a GET request
+   *
+   * @example
+   * client.get(['/api/v3', '/me'], options)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
+   * @param {Object} options - request options
+   *
+   * @returns {Promise} fetch response in json format
+   */
   get: function get() {
     for (var _len = arguments.length, args = Array(_len), _key = 0; _key < _len; _key++) {
       args[_key] = arguments[_key];
@@ -108,6 +131,25 @@ exports.default = {
 
     return this.request.apply(this, ['get'].concat(_toConsumableArray(args)));
   },
+
+
+  /**
+   * Send a PUT request
+   *
+   * @example
+   * client.put(['/api/v3/me'], options)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
+   * @param {Object} options - request options
+   *
+   * @returns {Promise} fetch response in json format
+   */
   put: function put() {
     for (var _len2 = arguments.length, args = Array(_len2), _key2 = 0; _key2 < _len2; _key2++) {
       args[_key2] = arguments[_key2];
@@ -115,6 +157,25 @@ exports.default = {
 
     return this.request.apply(this, ['put'].concat(_toConsumableArray(args)));
   },
+
+
+  /**
+   * Send a POST request
+   *
+   * @example
+   * client.post(['/api/v3/me'], options)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
+   * @param {Object} options - request options
+   *
+   * @returns {Promise} fetch response in json format
+   */
   post: function post() {
     for (var _len3 = arguments.length, args = Array(_len3), _key3 = 0; _key3 < _len3; _key3++) {
       args[_key3] = arguments[_key3];
@@ -122,6 +183,25 @@ exports.default = {
 
     return this.request.apply(this, ['post'].concat(_toConsumableArray(args)));
   },
+
+
+  /**
+   * Send a DELETE request
+   *
+   * @example
+   * client.delete(['/api/v3/me'], options)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
+   * @param {Object} options - request options
+   *
+   * @returns {Promise} fetch response in json format
+   */
   delete: function _delete() {
     for (var _len4 = arguments.length, args = Array(_len4), _key4 = 0; _key4 < _len4; _key4++) {
       args[_key4] = arguments[_key4];
@@ -129,16 +209,42 @@ exports.default = {
 
     return this.request.apply(this, ['delete'].concat(_toConsumableArray(args)));
   },
-  setApiPath: function setApiPath(apiPath) {
-    this.apiPath = apiPath;
 
-    return this;
-  },
+
+  /**
+   * Set static config
+   *
+   *
+   * @param {Object} staticConfig
+   * @param {string} staticConfig.baseUrl - User base url
+   *
+   * @returns {Object} current PublicClient
+   */
   setStaticConfig: function setStaticConfig(staticConfig) {
     this.staticConfig = staticConfig;
 
     return this;
   },
+
+
+  /**
+   * Get user's base url
+   *
+   * @returns {string} User's base url
+   */
+  getBaseUrl: function getBaseUrl() {
+    return this.staticConfig.baseUrl;
+  },
+
+
+  /**
+   * Set user's base url from a given location
+   *
+   * @returns {Object} location - window.location
+   * @returns {Object} location.host
+   * @returns {Object} location.protocol
+   * @returns {Object} location.href
+   */
   setClientBaseUrlFromLocation: function setClientBaseUrlFromLocation(location) {
     var host = location.host,
         protocol = location.protocol,
@@ -150,15 +256,31 @@ exports.default = {
 
     return this;
   },
-  getAssetsBaseUrl: function getAssetsBaseUrl() {
-    return this.staticConfig.baseUrl;
-  },
+
+
+  /**
+   * Send a request
+   *
+   * @example
+   * client.request('post', ['/api/v3/me'], options)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   * @param {string} - request method
+   * @param {Array} - an array of strings to build the request path, that will be added to the user's baseUrl
+   * @param {Object} - request options
+   *
+   * @returns {Promise} fetch response in json format
+   */
   request: function request(method, uriParts) {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
     var baseUrl = this.staticConfig.baseUrl;
     var url = _utils2.default.makeRelativePath(uriParts);
-    var REQUEST_PATH = baseUrl + '/' + url;
+    var REQUEST_PATH = '' + baseUrl + url;
 
     _utils2.default.addHeaders(options, method);
 
@@ -179,26 +301,44 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-var ApiDataPath = exports.ApiDataPath = Object.freeze({
-  COLUMNS: '/columns',
-  CONFIG: '/me',
-  TABLES: '/tables',
-  VIZ: '/viz'
-});
 
-var ApiVersionPath = exports.ApiVersionPath = Object.freeze({
-  API_DEFAULT_URI: 'api/v3',
-  API_V1_URI: 'api/v1',
-  API_V2_URI: 'api/v2',
-  API_V3_URI: 'api/v3'
-});
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
-var Paths = exports.Paths = Object.freeze({
-  COLUMNS: ApiDataPath.COLUMNS,
-  CONFIG: '' + ApiVersionPath.API_V3_URI + ApiDataPath.CONFIG,
-  TABLES: '' + ApiVersionPath.API_V1_URI + ApiDataPath.TABLES,
-  VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ
-});
+var _request = __webpack_require__(3);
+
+var USER_REGEX = /(\/(u|user)\/[a-z0-9\-]+)\//;
+
+exports.default = {
+  addHeaders: function addHeaders(options, method, additional) {
+    Object.assign(options, {
+      method: method.toUpperCase(),
+      headers: _request.Request.Default.HEADERS,
+      credentials: _request.Request.Default.CREDENTIALS
+    });
+
+    return _extends({}, additional, options);
+  },
+  paramsToURI: function paramsToURI(params) {
+    var DEFAULT_PARAMS = '';
+
+    return this.checkParams(params) ? '?' + Object.keys(params).map(function (key) {
+      return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
+    }).join('&') : DEFAULT_PARAMS;
+  },
+  checkParams: function checkParams(params) {
+    var OBJECT_TYPE = '[object Object]';
+
+    return params && Object.prototype.toString.call(params) === OBJECT_TYPE && Object.keys(params).length;
+  },
+  makeRelativePath: function makeRelativePath(parts) {
+    return '' + parts.join('/');
+  },
+  getPathFromHref: function getPathFromHref(href) {
+    var regExp = href.match(USER_REGEX);
+    return regExp && regExp[1] || '';
+  }
+};
+module.exports = exports['default'];
 
 /***/ }),
 /* 2 */
@@ -216,54 +356,51 @@ var _public = __webpack_require__(0);
 
 var _public2 = _interopRequireDefault(_public);
 
-var _authenticated = __webpack_require__(6);
+var _authenticated = __webpack_require__(5);
 
 var _authenticated2 = _interopRequireDefault(_authenticated);
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+/**
+ * This is the entry point for carto-api-client
+ *
+ * This client enables interaction with the cartodb API by using REST requests.
+ * There are two clients: PublicClient and AuthenticatedClient.
+ * To interact with the API, you need to have a CARTO account.
+ * In order to do so, you have to provide your account base url, which has the format https://username.carto.com or https://organization.carto.com/u/username.
+ * In addition, you have to be authenticated to obtain private information.
+ *
+ * It can be used both in the server and the client side.
+ *
+ * @summary JavaScript client for cartodb API
+ *
+ * @param {Object} staticConfig
+ * @param {string} staticConfig.baseUrl - User base url
+ *
+ * @requires module:whatwg-fetch
+ *
+ * @example
+ * var Carto = require('carto-api-client');
+ * var client = Carto.AuthenticatedClient.setStaticConfig({
+ *   baseUrl: 'foobar.com'
+ * });
+ *
+ * client.getUser()
+ *   .then(function (data) {
+ *     console.log(data);
+ *   })
+ *   .catch(function (error) {
+ *     console.log(error);
+ *   });
+ *
+ */
 
 exports.PublicClient = _public2.default;
 exports.AuthenticatedClient = _authenticated2.default;
 
 /***/ }),
 /* 3 */
-/***/ (function(module, exports, __webpack_require__) {
-
-"use strict";
-
-
-Object.defineProperty(exports, "__esModule", {
-  value: true
-});
-
-var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
-
-var _request = __webpack_require__(4);
-
-var USER_REGEX = /(\/(u|user)\/[a-z0-9\-]+)\//;
-
-exports.default = {
-  addHeaders: function addHeaders(options, method, additional) {
-    Object.assign(options, {
-      method: method.toUpperCase(),
-      headers: _request.Request.Default.HEADERS,
-      credentials: _request.Request.Default.CREDENTIALS
-    });
-
-    return _extends({}, additional, options);
-  },
-  makeRelativePath: function makeRelativePath(parts) {
-    return '' + parts.join('/');
-  },
-  getPathFromHref: function getPathFromHref(href) {
-    var regExp = href.match(USER_REGEX);
-    return regExp && regExp[1] || '';
-  }
-};
-module.exports = exports['default'];
-
-/***/ }),
-/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -284,7 +421,7 @@ var Request = exports.Request = Object.freeze({
 });
 
 /***/ }),
-/* 5 */
+/* 4 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -751,7 +888,7 @@ var Request = exports.Request = Object.freeze({
 
 
 /***/ }),
-/* 6 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -767,36 +904,69 @@ var _public = __webpack_require__(0);
 
 var _public2 = _interopRequireDefault(_public);
 
-var _paths = __webpack_require__(1);
+var _paths = __webpack_require__(6);
 
 var _paths2 = _interopRequireDefault(_paths);
 
+var _utils = __webpack_require__(1);
+
+var _utils2 = _interopRequireDefault(_utils);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+/**
+ * Carto Authenticated Client
+ *
+ * @param {Object} staticConfig
+ * @param {string} staticConfig.baseUrl - User base url
+ *
+ *
+ * @constructor
+ * @extends PublicClient
+ * @return {AuthenticatedClient} Object that contains methods to interact directly with the API
+ */
+
 exports.default = _extends({}, _public2.default, {
-  getConfig: function getConfig(params) {
-    var URI_PARAMS = params ? this.paramsToURI(params) : {};
+
+  /**
+   * Get the user configuration
+   *
+   * @example
+   * client.getConfig()
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @returns {Promise<object>} fetch user data in json format
+   */
+
+  getUser: function getUser(params) {
+    var URI_PARAMS = params ? _utils2.default.paramsToURI(params) : {};
 
     return this.get([_paths2.default.CONFIG, URI_PARAMS]);
   },
-  getVisualization: function getVisualization(vizID, params) {
-    var VIZ_PATH = '/' + vizID;
-    var URI_PARAMS = this.paramsToURI(params);
 
-    return this.get([_paths2.default.VIZ, VIZ_PATH, URI_PARAMS]);
-  },
-  getTable: function getTable(name, params) {
-    var NAME_PATH = '/' + name;
-    var URI_PARAMS = this.paramsToURI(params);
 
-    return this.get([_paths2.default.TABLES, NAME_PATH, URI_PARAMS]);
-  },
-  getTableColumns: function getTableColumns(name, params) {
-    var NAME_PATH = '/' + name;
-    var URI_PARAMS = this.paramsToURI(params);
+  /**
+   * Delete a user by passing a password confirmation
+   *
+   * @example
+   * client.deleteUser(payload)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @param {Object} payload
+   * @param {Object} payload.deletion_password_confirmation - user's password
+   * @returns {Promise<object>} fetch response in json format
+   */
 
-    return this.get([_paths2.default.TABLES, NAME_PATH, _paths2.default.COLUMNS, URI_PARAMS]);
-  },
   deleteUser: function deleteUser(payload) {
     var OPTIONS = {
       data: JSON.stringify(payload),
@@ -804,15 +974,127 @@ exports.default = _extends({}, _public2.default, {
     };
     return this.delete([_paths2.default.CONFIG], OPTIONS);
   },
+
+
+  /**
+   * Update a user by passing a user config
+   *
+   * @example
+   * client.deleteUser(payload)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @param {Object} payload
+   * @param {string} payload.user
+   * @param {string} payload.user.username
+   * @param {string} payload.user.email
+   * @param {string} payload.user.avatar_url
+   * @param {string} payload.user.old_password
+   * @param {string} payload.user.new_password
+   * @param {string} payload.user.confirm_password
+   *
+   * @returns {Promise<object>} fetch response in json format
+   */
   updateUser: function updateUser(payload) {
     var OPTIONS = {
       data: JSON.stringify(payload),
       dataType: 'json'
     };
     return this.put([_paths2.default.CONFIG], OPTIONS);
+  },
+
+
+  /**
+   * Get a visualization
+   *
+   * @example
+   * client.getVisualization(vizID, params)
+   *   .then(function (data) {
+   *     console.log(data);
+   *   })
+   *   .catch(function (error) {
+   *     console.log(error);
+   *   });
+   *
+   * @param {Object} params - set the different params so they can be added to the response object
+   * @param {boolean} params.fetch_related_canonical_visualizations
+   * @param {boolean} params.fetch_user
+   * @param {boolean} params.load_related_canonical_visualizations
+   * @param {boolean} params.related
+   * @param {boolean} params.show_auth_tokens
+   * @param {boolean} params.show_liked
+   * @param {boolean} params.show_likes
+   * @param {boolean} params.show_permission
+   * @param {boolean} params.show_stats
+   * @param {boolean} params.show_synchronization
+   * @param {boolean} params.show_table
+   * @param {boolean} params.show_table_size_and_row_count
+   * @param {boolean} params.show_user
+   * @param {boolean} params.show_user_basemaps
+   * @param {boolean} params.show_uses_builder_features
+   * @param {string} params.password
+   *
+   * @param {Array} params.types
+   * @param {boolean} params.bbox
+   * @param {boolean} params.exclude_raster (default: true)
+   * @param {boolean} params.exclude_shared (default: true)
+   * @param {boolean} params.locked
+   * @param {boolean} params.only_liked (default: true)
+   * @param {boolean} params.only_shared (default: true)
+   * @param {boolean} params.only_with_display_name (default: true)
+   * @param {boolean} params.shared
+   * @param {boolean} params.tags
+   * @param {boolean} params.with_id_or_name
+   * @param {number} params.page
+   * @param {number} params.per_page
+   * @param {string} params.order
+   * @param {string} params.privacy
+   * @param {string} params.type
+   *
+   * @returns {Promise<object>} fetch response in json format
+   */
+  getVisualization: function getVisualization(vizID, params) {
+    var VIZ_PATH = '/' + vizID;
+    var URI_PARAMS = _utils2.default.paramsToURI(params);
+
+    return this.get([_paths2.default.VIZ, VIZ_PATH, URI_PARAMS]);
   }
 });
 module.exports = exports['default'];
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var ApiDataPath = exports.ApiDataPath = Object.freeze({
+  COLUMNS: '/columns',
+  CONFIG: '/me',
+  TABLES: '/tables',
+  VIZ: '/viz'
+});
+
+var ApiVersionPath = exports.ApiVersionPath = Object.freeze({
+  API_V1_URI: '/api/v1',
+  API_V2_URI: '/api/v2',
+  API_V3_URI: '/api/v3'
+});
+
+var Paths = exports.Paths = Object.freeze({
+  COLUMNS: ApiDataPath.COLUMNS,
+  CONFIG: '' + ApiVersionPath.API_V3_URI + ApiDataPath.CONFIG,
+  TABLES: '' + ApiVersionPath.API_V1_URI + ApiDataPath.TABLES,
+  VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ
+});
 
 /***/ })
 /******/ ]);

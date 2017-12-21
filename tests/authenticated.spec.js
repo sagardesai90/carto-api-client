@@ -1,7 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import { AuthenticatedClient } from '../src/index.js';
+import { AuthenticatedClient } from '../src/clients/authenticated.js';
 
 const BASE_URL = 'https://matallo.carto.com';
 const expect = chai.expect;
@@ -35,7 +35,7 @@ describe('AuthenticatedClient', function () {
     sandbox.restore();
   });
 
-  describe('.getConfig', () => {
+  describe('.getUser', () => {
     it('should get user config', function (done) {
       const fetchResponseStub = sandbox
         .stub(window, 'fetch')
@@ -43,7 +43,7 @@ describe('AuthenticatedClient', function () {
 
       AuthenticatedClient
         .setStaticConfig(StaticConfig)
-        .getConfig()
+        .getUser()
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
           done();
@@ -56,7 +56,7 @@ describe('AuthenticatedClient', function () {
         .returns(Promise.reject(errorResponse));
 
       AuthenticatedClient.setStaticConfig(StaticConfig)
-        .getConfig()
+        .getUser()
         .catch((error) => {
           expect(fetchErrorStub).to.have.been.called;
           expect(error).to.be.equal(errorResponse);

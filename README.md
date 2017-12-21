@@ -25,7 +25,11 @@ npm run build
 * Test
 
 ```
-npm run test:build && npm run test:server
+npm run test:build
+```
+
+```
+npm run test:server
 ```
 
 Open http://localhost:8081/tests/
@@ -41,7 +45,7 @@ var client = Carto.AuthenticatedClient.setStaticConfig({
   baseUrl: 'foobar.com'
 });
 
-client.getConfig()
+client.getUser()
   .then(function (data) {
     console.log(data);
   })
@@ -58,7 +62,7 @@ const client = Carto.AuthenticatedClient.setStaticConfig({
   baseUrl: 'foobar.com'
 });
 
-client.getConfig()
+client.getUser()
   .then((data) => {
     console.log(data);
   })

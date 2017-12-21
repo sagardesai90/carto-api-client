@@ -4,17 +4,15 @@ const path = require('path');
 const env = require('yargs').argv.env;
 
 const libraryName = 'carto-api-client';
-
-const uglifySettings = {
-  minimize: true
-};
+const uglifySettings = { minimize: true };
 
 let plugins = [];
 
 const outputFile = env !== 'build'
   ? libraryName + '.js'
   : (plugins.push(new UglifyJsPlugin(uglifySettings)),
-    libraryName + '.min.js');
+    libraryName + '.min.js'
+  );
 
 const config = {
   entry: path.join(__dirname, '/src/index.js'),
