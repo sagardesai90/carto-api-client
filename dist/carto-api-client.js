@@ -7,7 +7,7 @@
 		exports["carto-api-client"] = factory();
 	else
 		root["carto-api-client"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -83,14 +83,11 @@ return /******/ (function(modules) { // webpackBootstrap
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.PublicClient = undefined;
 
 var _utils = __webpack_require__(1);
 
-var _utils2 = _interopRequireDefault(_utils);
-
 __webpack_require__(4);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
@@ -100,16 +97,17 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  * @param {Object} staticConfig
  * @param {string} staticConfig.baseUrl - User base url
  *
- * @constructor
+ * @namespace CartoApiClient.PublicClient
  * @return {PublicClient}
  */
 
-exports.default = {
+var PublicClient = exports.PublicClient = {
   staticConfig: {},
 
   /**
    * Send a GET request
    *
+   * @memberof CartoApiClient.PublicClient
    * @example
    * client.get(['/api/v3', '/me'], options)
    *   .then(function (data) {
@@ -136,6 +134,7 @@ exports.default = {
   /**
    * Send a PUT request
    *
+   * @memberof CartoApiClient.PublicClient
    * @example
    * client.put(['/api/v3/me'], options)
    *   .then(function (data) {
@@ -162,6 +161,7 @@ exports.default = {
   /**
    * Send a POST request
    *
+   * @memberof CartoApiClient.PublicClient
    * @example
    * client.post(['/api/v3/me'], options)
    *   .then(function (data) {
@@ -188,6 +188,7 @@ exports.default = {
   /**
    * Send a DELETE request
    *
+   * @memberof CartoApiClient.PublicClient
    * @example
    * client.delete(['/api/v3/me'], options)
    *   .then(function (data) {
@@ -214,7 +215,7 @@ exports.default = {
   /**
    * Set static config
    *
-   *
+   * @memberof CartoApiClient.PublicClient
    * @param {Object} staticConfig
    * @param {string} staticConfig.baseUrl - User base url
    *
@@ -230,16 +231,18 @@ exports.default = {
   /**
    * Get user's base url
    *
+   * @memberof CartoApiClient.PublicClient
    * @returns {string} User's base url
    */
   getBaseUrl: function getBaseUrl() {
-    return this.staticConfig.baseUrl;
+    return this.staticConfig.baseUrl || '';
   },
 
 
   /**
    * Set user's base url from a given location
    *
+   * @memberof CartoApiClient.PublicClient
    * @returns {Object} location - window.location
    * @returns {Object} location.host
    * @returns {Object} location.protocol
@@ -250,7 +253,7 @@ exports.default = {
         protocol = location.protocol,
         href = location.href;
 
-    var PATH = _utils2.default.getPathFromHref(href);
+    var PATH = _utils.Utils.getPathFromHref(href);
 
     this.staticConfig.baseUrl = protocol + '//' + host + PATH;
 
@@ -261,6 +264,7 @@ exports.default = {
   /**
    * Send a request
    *
+   * @memberof CartoApiClient.PublicClient
    * @example
    * client.request('post', ['/api/v3/me'], options)
    *   .then(function (data) {
@@ -278,18 +282,17 @@ exports.default = {
   request: function request(method, uriParts) {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    var baseUrl = this.staticConfig.baseUrl;
-    var url = _utils2.default.makeRelativePath(uriParts);
+    var baseUrl = this.getBaseUrl();
+    var url = _utils.Utils.makeRelativePath(uriParts);
     var REQUEST_PATH = '' + baseUrl + url;
 
-    _utils2.default.addHeaders(options, method);
+    _utils.Utils.addHeaders(options, method);
 
     return fetch(REQUEST_PATH, options).then(function (response) {
       return response.json();
     });
   }
 };
-module.exports = exports['default'];
 
 /***/ }),
 /* 1 */
@@ -301,6 +304,7 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.Utils = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
@@ -308,7 +312,7 @@ var _request = __webpack_require__(3);
 
 var USER_REGEX = /(\/(u|user)\/[a-z0-9\-]+)\//;
 
-exports.default = {
+var Utils = exports.Utils = {
   addHeaders: function addHeaders(options, method, additional) {
     Object.assign(options, {
       method: method.toUpperCase(),
@@ -338,7 +342,6 @@ exports.default = {
     return regExp && regExp[1] || '';
   }
 };
-module.exports = exports['default'];
 
 /***/ }),
 /* 2 */
@@ -350,20 +353,20 @@ module.exports = exports['default'];
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.AuthenticatedClient = exports.PublicClient = undefined;
+exports.CartoApiClient = undefined;
 
 var _public = __webpack_require__(0);
 
-var _public2 = _interopRequireDefault(_public);
-
 var _authenticated = __webpack_require__(5);
 
-var _authenticated2 = _interopRequireDefault(_authenticated);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
-
 /**
- * This is the entry point for carto-api-client
+ *
+ * @namespace CartoApiClient
+ * @summary JavaScript client for cartodb API
+ *
+ * @description
+ *
+ * This is the entry point for carto-api-client.
  *
  * This client enables interaction with the cartodb API by using REST requests.
  * There are two clients: PublicClient and AuthenticatedClient.
@@ -373,16 +376,14 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  * It can be used both in the server and the client side.
  *
- * @summary JavaScript client for cartodb API
- *
  * @param {Object} staticConfig
  * @param {string} staticConfig.baseUrl - User base url
  *
  * @requires module:whatwg-fetch
  *
  * @example
- * var Carto = require('carto-api-client');
- * var client = Carto.AuthenticatedClient.setStaticConfig({
+ * var CartoApiClient = require('carto-api-client');
+ * var client = CartoApiClient.AuthenticatedClient.setStaticConfig({
  *   baseUrl: 'foobar.com'
  * });
  *
@@ -396,8 +397,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
  *
  */
 
-exports.PublicClient = _public2.default;
-exports.AuthenticatedClient = _authenticated2.default;
+var CartoApiClient = exports.CartoApiClient = Object.freeze({
+  PublicClient: _public.PublicClient,
+  AuthenticatedClient: _authenticated.AuthenticatedClient
+});
 
 /***/ }),
 /* 3 */
@@ -897,42 +900,31 @@ var Request = exports.Request = Object.freeze({
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
+exports.AuthenticatedClient = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _public = __webpack_require__(0);
 
-var _public2 = _interopRequireDefault(_public);
-
 var _paths = __webpack_require__(6);
 
-var _paths2 = _interopRequireDefault(_paths);
-
 var _utils = __webpack_require__(1);
-
-var _utils2 = _interopRequireDefault(_utils);
-
-function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 /**
  * Carto Authenticated Client
  *
- * @param {Object} staticConfig
- * @param {string} staticConfig.baseUrl - User base url
- *
- *
- * @constructor
- * @extends PublicClient
+ * @namespace CartoApiClient.AuthenticatedClient
+ * @extends CartoApiClient.PublicClient
  * @return {AuthenticatedClient} Object that contains methods to interact directly with the API
  */
-
-exports.default = _extends({}, _public2.default, {
+var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.PublicClient, {
 
   /**
    * Get the user configuration
    *
+   * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getConfig()
+   * client.getUser()
    *   .then(function (data) {
    *     console.log(data);
    *   })
@@ -942,17 +934,17 @@ exports.default = _extends({}, _public2.default, {
    *
    * @returns {Promise<object>} fetch user data in json format
    */
-
   getUser: function getUser(params) {
-    var URI_PARAMS = params ? _utils2.default.paramsToURI(params) : {};
+    var URI_PARAMS = params ? _utils.Utils.paramsToURI(params) : {};
 
-    return this.get([_paths2.default.CONFIG, URI_PARAMS]);
+    return this.get([_paths.Paths.CONFIG, URI_PARAMS]);
   },
 
 
   /**
    * Delete a user by passing a password confirmation
    *
+   * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.deleteUser(payload)
    *   .then(function (data) {
@@ -966,21 +958,21 @@ exports.default = _extends({}, _public2.default, {
    * @param {Object} payload.deletion_password_confirmation - user's password
    * @returns {Promise<object>} fetch response in json format
    */
-
   deleteUser: function deleteUser(payload) {
     var OPTIONS = {
       data: JSON.stringify(payload),
       dataType: 'json'
     };
-    return this.delete([_paths2.default.CONFIG], OPTIONS);
+    return this.delete([_paths.Paths.CONFIG], OPTIONS);
   },
 
 
   /**
    * Update a user by passing a user config
    *
+   * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.deleteUser(payload)
+   * client.updateUser(payload)
    *   .then(function (data) {
    *     console.log(data);
    *   })
@@ -1004,13 +996,14 @@ exports.default = _extends({}, _public2.default, {
       data: JSON.stringify(payload),
       dataType: 'json'
     };
-    return this.put([_paths2.default.CONFIG], OPTIONS);
+    return this.put([_paths.Paths.CONFIG], OPTIONS);
   },
 
 
   /**
    * Get a visualization
    *
+   * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.getVisualization(vizID, params)
    *   .then(function (data) {
@@ -1059,12 +1052,11 @@ exports.default = _extends({}, _public2.default, {
    */
   getVisualization: function getVisualization(vizID, params) {
     var VIZ_PATH = '/' + vizID;
-    var URI_PARAMS = _utils2.default.paramsToURI(params);
+    var URI_PARAMS = _utils.Utils.paramsToURI(params);
 
-    return this.get([_paths2.default.VIZ, VIZ_PATH, URI_PARAMS]);
+    return this.get([_paths.Paths.VIZ, VIZ_PATH, URI_PARAMS]);
   }
 });
-module.exports = exports['default'];
 
 /***/ }),
 /* 6 */

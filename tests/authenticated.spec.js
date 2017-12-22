@@ -55,7 +55,8 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
-      AuthenticatedClient.setStaticConfig(StaticConfig)
+      AuthenticatedClient
+        .setStaticConfig(StaticConfig)
         .getUser()
         .catch((error) => {
           expect(fetchErrorStub).to.have.been.called;

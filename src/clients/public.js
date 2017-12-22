@@ -125,7 +125,7 @@ export const PublicClient = {
    * @returns {string} User's base url
    */
   getBaseUrl () {
-    return this.staticConfig.baseUrl;
+    return this.staticConfig.baseUrl || '';
   },
 
   /**
@@ -165,7 +165,7 @@ export const PublicClient = {
    * @returns {Promise} fetch response in json format
    */
   request (method, uriParts, options = {}) {
-    const baseUrl = this.staticConfig.baseUrl;
+    const baseUrl = this.getBaseUrl();
     const url = Utils.makeRelativePath(uriParts);
     const REQUEST_PATH = `${baseUrl}${url}`;
 

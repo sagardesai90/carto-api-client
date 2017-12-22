@@ -5,6 +5,7 @@
   "main": "dist/carto-api-client.js",
   "scripts": {
     "build": "webpack --env dev && webpack --env build",
+    "bump": "npm version patch",
     "dev": "webpack --progress --colors --watch --env dev",
     "test:build": "webpack --config webpack.test.config.js --watch",
     "test:server": "webpack-dev-server --config webpack.test.config.js --hot --inline --open-page tests",

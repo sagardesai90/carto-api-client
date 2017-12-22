@@ -17,7 +17,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getConfig()
+   * client.getUser()
    *   .then(function (data) {
    *     console.log(data);
    *   })
