@@ -932,7 +932,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    * @returns {Promise<object>} fetch user data in json format
    */
   getUser: function getUser(params) {
-    var URI_PARAMS = params ? _utils.Utils.paramsToURI(params) : {};
+    var URI_PARAMS = _utils.Utils.paramsToURI(params);
 
     return this.get([_paths.Paths.CONFIG, URI_PARAMS]);
   },
@@ -1052,6 +1052,16 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
     var URI_PARAMS = _utils.Utils.paramsToURI(params);
 
     return this.get([_paths.Paths.VIZ, VIZ_PATH, URI_PARAMS]);
+  },
+  getVisualizations: function getVisualizations(params) {
+    var URI_PARAMS = _utils.Utils.paramsToURI(params);
+
+    return this.get([_paths.Paths.VIZ, URI_PARAMS]);
+  },
+  getMap: function getMap(mapID, params) {
+    var MAP_PATH = '/' + mapID;
+    var URI_PARAMS = _utils.Utils.paramsToURI(params);
+    return this.get([_paths.Paths.MAPS, MAP_PATH, URI_PARAMS]);
   }
 });
 
@@ -1069,7 +1079,8 @@ var ApiDataPath = exports.ApiDataPath = Object.freeze({
   COLUMNS: '/columns',
   CONFIG: '/me',
   TABLES: '/tables',
-  VIZ: '/viz'
+  VIZ: '/viz',
+  MAPS: '/maps'
 });
 
 var ApiVersionPath = exports.ApiVersionPath = Object.freeze({
@@ -1082,7 +1093,8 @@ var Paths = exports.Paths = Object.freeze({
   COLUMNS: ApiDataPath.COLUMNS,
   CONFIG: '' + ApiVersionPath.API_V3_URI + ApiDataPath.CONFIG,
   TABLES: '' + ApiVersionPath.API_V1_URI + ApiDataPath.TABLES,
-  VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ
+  VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ,
+  MAPS: '' + ApiVersionPath.API_V1_URI + ApiDataPath.MAPS
 });
 
 /***/ })
