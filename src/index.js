@@ -39,7 +39,4 @@ import { AuthenticatedClient } from './clients/authenticated';
  *
  */
 
-export const CartoApiClient = Object.freeze({
-  PublicClient,
-  AuthenticatedClient
-});
+export default { PublicClient, AuthenticatedClient };

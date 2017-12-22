@@ -1,7 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import { AuthenticatedClient } from '../src/clients/authenticated.js';
+import CartoApiClient from '../src/index.js';
 
 const BASE_URL = 'https://matallo.carto.com';
 const expect = chai.expect;
@@ -20,6 +20,8 @@ const StaticConfig = {
   baseUrl: BASE_URL
 };
 
+const client = CartoApiClient.AuthenticatedClient;
+
 describe('AuthenticatedClient', function () {
   let sandbox;
 
@@ -27,8 +29,7 @@ describe('AuthenticatedClient', function () {
     chai.use(sinonChai);
     this.sinon = sandbox = sinon.sandbox.create();
 
-    AuthenticatedClient
-      .setStaticConfig(StaticConfig);
+    client.setStaticConfig(StaticConfig);
   });
 
   afterEach(function () {
@@ -41,7 +42,7 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
-      AuthenticatedClient
+      client
         .setStaticConfig(StaticConfig)
         .getUser()
         .then((data) => {
@@ -55,7 +56,7 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
-      AuthenticatedClient
+      client
         .setStaticConfig(StaticConfig)
         .getUser()
         .catch((error) => {

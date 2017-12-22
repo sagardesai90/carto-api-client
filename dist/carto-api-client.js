@@ -353,7 +353,6 @@ var Utils = exports.Utils = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.CartoApiClient = undefined;
 
 var _public = __webpack_require__(0);
 
@@ -397,10 +396,8 @@ var _authenticated = __webpack_require__(5);
  *
  */
 
-var CartoApiClient = exports.CartoApiClient = Object.freeze({
-  PublicClient: _public.PublicClient,
-  AuthenticatedClient: _authenticated.AuthenticatedClient
-});
+exports.default = { PublicClient: _public.PublicClient, AuthenticatedClient: _authenticated.AuthenticatedClient };
+module.exports = exports['default'];
 
 /***/ }),
 /* 3 */
