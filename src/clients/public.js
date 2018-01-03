@@ -13,7 +13,9 @@ import 'whatwg-fetch';
  */
 
 export const PublicClient = {
-  staticConfig: {},
+  staticConfig: {
+    baseUrl: ''
+  },
 
   /**
    * Send a GET request

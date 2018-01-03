@@ -52,8 +52,7 @@ export const AuthenticatedClient = {
    */
   deleteUser (payload) {
     const OPTIONS = {
-      data: JSON.stringify(payload),
-      dataType: 'json'
+      body: JSON.stringify(payload)
     };
     return this.delete([Paths.CONFIG], OPTIONS);
   },
@@ -84,8 +83,7 @@ export const AuthenticatedClient = {
    */
   updateUser (payload) {
     const OPTIONS = {
-      data: JSON.stringify(payload),
-      dataType: 'json'
+      body: JSON.stringify(payload)
     };
     return this.put([Paths.CONFIG], OPTIONS);
   },
