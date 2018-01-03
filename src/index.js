@@ -1,5 +1,6 @@
 import { PublicClient } from './clients/public';
 import { AuthenticatedClient } from './clients/authenticated';
+import { ApiClientError } from './errors/api-client';
 
 /**
  *
@@ -30,13 +31,9 @@ import { AuthenticatedClient } from './clients/authenticated';
  * });
  *
  * client.getUser()
- *   .then(function (data) {
- *     console.log(data);
- *   })
- *   .catch(function (error) {
- *     console.log(error);
- *   });
+ *   .then(console.log)
+ *   .catch(console.error);
  *
  */
 
-export default { PublicClient, AuthenticatedClient };
+export default { PublicClient, AuthenticatedClient, ApiClientError };

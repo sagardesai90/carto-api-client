@@ -360,6 +360,8 @@ var _public = __webpack_require__(0);
 
 var _authenticated = __webpack_require__(5);
 
+var _apiClient = __webpack_require__(7);
+
 /**
  *
  * @namespace CartoApiClient
@@ -389,16 +391,12 @@ var _authenticated = __webpack_require__(5);
  * });
  *
  * client.getUser()
- *   .then(function (data) {
- *     console.log(data);
- *   })
- *   .catch(function (error) {
- *     console.log(error);
- *   });
+ *   .then(console.log)
+ *   .catch(console.error);
  *
  */
 
-exports.default = { PublicClient: _public.PublicClient, AuthenticatedClient: _authenticated.AuthenticatedClient };
+exports.default = { PublicClient: _public.PublicClient, AuthenticatedClient: _authenticated.AuthenticatedClient, ApiClientError: _apiClient.ApiClientError };
 module.exports = exports['default'];
 
 /***/ }),
@@ -1096,6 +1094,59 @@ var Paths = exports.Paths = Object.freeze({
   VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ,
   MAPS: '' + ApiVersionPath.API_V1_URI + ApiDataPath.MAPS
 });
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+/**
+ * Carto Api Error Emitter
+ *
+ *
+ * @namespace CartoApiClient.ApiClientError
+ * @return {ApiClientError}
+ */
+
+var ApiClientError = exports.ApiClientError = {
+  /**
+   * Send a custom ApiClientError response
+   *
+   * @memberof CartoApiClient.ApiClientError
+   * @example
+   * client
+   *   .getUser()
+   *   .then((data) => {
+   *     throw CartoApiClient.ApiClientError.send(data);
+   *   })
+   *   .catch((error) => {
+   *     // Handle custom error
+   *   });
+   *
+   * @param {Object} data - information about the error
+   * @param {Object} data.errors - list of errors, with the format { errorType: ['error_1', 'error_2'] }
+   * @param {string} data.message - description of the error
+   *
+   * @returns {Object} errors - list of errors, with the format {}
+   * @returns {Object} message - description of the error
+   * @returns {Object} name - ApiClientError
+   * @returns {Object} stack - stack trace of the current error
+   */
+
+  send: function send(data) {
+    return {
+      errors: data.errors || {},
+      message: data.message || '',
+      name: 'ApiClientError',
+      stack: new Error().stack
+    };
+  }
+};
 
 /***/ })
 /******/ ]);
