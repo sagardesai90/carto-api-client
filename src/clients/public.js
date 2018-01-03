@@ -23,12 +23,8 @@ export const PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.get(['/api/v3', '/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -45,12 +41,8 @@ export const PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.put(['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -67,12 +59,8 @@ export const PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.post(['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -89,12 +77,8 @@ export const PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.delete(['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -154,12 +138,9 @@ export const PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.request('post', ['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
    * @param {string} - request method
    * @param {Array} - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} - request options

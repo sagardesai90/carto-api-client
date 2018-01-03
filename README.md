@@ -46,12 +46,8 @@ var client = Carto.AuthenticatedClient.setStaticConfig({
 });
 
 client.getUser()
-  .then(function (data) {
-    console.log(data);
-  })
-  .catch(function (error) {
-    console.log(error);
-  });
+  .then(console.log)
+  .catch(console.error);
 ```
 
 ES6
@@ -63,12 +59,8 @@ const client = Carto.AuthenticatedClient.setStaticConfig({
 });
 
 client.getUser()
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+  .then(console.log)
+  .catch(console.error);
 ```
 
 Browser
@@ -89,12 +81,8 @@ This library uses a **fetch** polyfill: [whatwg-fetch](https://github.com/github
 
 ```js
 client.getVisualization('myVizId', {} /* optional params */)
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+  .then(console.log)
+  .catch(console.error);
 ```
 
 #### Params
@@ -142,10 +130,6 @@ client.getVisualization('myVizId', {
     show_stats: true,
     show_table_size_and_row_count: true
   })
-  .then((data) => {
-    console.log(data);
-  })
-  .catch((error) => {
-    console.log(error);
-  });
+  .then(console.log)
+  .catch(console.error);
 ```

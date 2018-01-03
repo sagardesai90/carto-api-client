@@ -18,12 +18,8 @@ export const AuthenticatedClient = {
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.getUser()
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @returns {Promise<object>} fetch user data in json format
    */
@@ -39,12 +35,8 @@ export const AuthenticatedClient = {
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.deleteUser(payload)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Object} payload
    * @param {Object} payload.deletion_password_confirmation - user's password
@@ -63,12 +55,8 @@ export const AuthenticatedClient = {
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.updateUser(payload)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Object} payload
    * @param {string} payload.user
@@ -94,12 +82,8 @@ export const AuthenticatedClient = {
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.getVisualization(vizID, params)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Object} params - set the different params so they can be added to the response object
    * @param {boolean} params.fetch_related_canonical_visualizations
