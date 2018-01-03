@@ -2,7 +2,6 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import CartoApiClient from '../../../src/index.js';
-import { Utils } from '../../../src/utils/utils.js';
 
 const BASE_URL = 'https://matallo.carto.com';
 const expect = chai.expect;
@@ -37,21 +36,19 @@ describe('AuthenticatedClient', function () {
     sandbox.restore();
   });
 
-  describe('.updateUser', () => {
-    it('should update user information', function (done) {
+  describe('.getVisualization', () => {
+    it('should get a visualization', function (done) {
       const fetchResponseStub = sandbox
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
-      const payload = {
-        user: {
-          email: 'user@email.com'
-        }
+      const params = {
+        per_page: 1
       };
 
       client
         .setStaticConfig(StaticConfig)
-        .updateUser(payload)
+        .getVisualization('vizId', params)
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
           done();
@@ -63,46 +60,15 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
-      const payload = {
-        user: {
-          email: 'user@email.com'
-        }
+      const params = {
+        per_page: 1
       };
 
       client
         .setStaticConfig(StaticConfig)
-        .updateUser(payload)
-        .catch((error) => {
+        .getVisualization('vizId', params)
+        .catch(() => {
           expect(fetchErrorStub).to.have.been.called;
-          expect(error).to.be.equal(errorResponse);
-          done();
-        });
-    });
-
-    it('should add a "body" field with the request payload', function (done) {
-      const clientPutRequestSpy = sinon.spy(client, 'put');
-
-      const payload = {
-        user: {
-          email: 'user@email.com'
-        }
-      };
-
-      const payloadOptions = {
-        body: JSON.stringify(payload)
-      };
-
-      const options = Utils.addHeaders(payloadOptions, 'put');
-
-      sandbox
-        .stub(window, 'fetch')
-        .returns(Promise.resolve(expectedResponse));
-
-      client
-        .setStaticConfig(StaticConfig)
-        .updateUser(payload)
-        .then(() => {
-          expect(clientPutRequestSpy.withArgs(options)).to.be.ok;
           done();
         });
     });

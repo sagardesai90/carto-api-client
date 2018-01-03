@@ -37,21 +37,19 @@ describe('AuthenticatedClient', function () {
     sandbox.restore();
   });
 
-  describe('.updateUser', () => {
-    it('should update user information', function (done) {
+  describe('.deleteUser', () => {
+    it('should be able to delete a user', function (done) {
       const fetchResponseStub = sandbox
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
       const payload = {
-        user: {
-          email: 'user@email.com'
-        }
+        deletion_password_confirmation: '1234567'
       };
 
       client
         .setStaticConfig(StaticConfig)
-        .updateUser(payload)
+        .deleteUser(payload)
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
           done();
@@ -64,14 +62,12 @@ describe('AuthenticatedClient', function () {
         .returns(Promise.reject(errorResponse));
 
       const payload = {
-        user: {
-          email: 'user@email.com'
-        }
+        deletion_password_confirmation: '1234567'
       };
 
       client
         .setStaticConfig(StaticConfig)
-        .updateUser(payload)
+        .deleteUser(payload)
         .catch((error) => {
           expect(fetchErrorStub).to.have.been.called;
           expect(error).to.be.equal(errorResponse);
@@ -80,19 +76,17 @@ describe('AuthenticatedClient', function () {
     });
 
     it('should add a "body" field with the request payload', function (done) {
-      const clientPutRequestSpy = sinon.spy(client, 'put');
+      const clientPutRequestSpy = sinon.spy(client, 'delete');
 
       const payload = {
-        user: {
-          email: 'user@email.com'
-        }
+        deletion_password_confirmation: '1234567'
       };
 
       const payloadOptions = {
         body: JSON.stringify(payload)
       };
 
-      const options = Utils.addHeaders(payloadOptions, 'put');
+      const options = Utils.addHeaders(payloadOptions, 'delete');
 
       sandbox
         .stub(window, 'fetch')
@@ -100,7 +94,7 @@ describe('AuthenticatedClient', function () {
 
       client
         .setStaticConfig(StaticConfig)
-        .updateUser(payload)
+        .deleteUser(payload)
         .then(() => {
           expect(clientPutRequestSpy.withArgs(options)).to.be.ok;
           done();
