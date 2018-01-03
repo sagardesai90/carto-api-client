@@ -102,7 +102,9 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
  */
 
 var PublicClient = exports.PublicClient = {
-  staticConfig: {},
+  staticConfig: {
+    baseUrl: ''
+  },
 
   /**
    * Send a GET request
@@ -957,8 +959,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    */
   deleteUser: function deleteUser(payload) {
     var OPTIONS = {
-      data: JSON.stringify(payload),
-      dataType: 'json'
+      body: JSON.stringify(payload)
     };
     return this.delete([_paths.Paths.CONFIG], OPTIONS);
   },
@@ -990,8 +991,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    */
   updateUser: function updateUser(payload) {
     var OPTIONS = {
-      data: JSON.stringify(payload),
-      dataType: 'json'
+      body: JSON.stringify(payload)
     };
     return this.put([_paths.Paths.CONFIG], OPTIONS);
   },
