@@ -85,25 +85,27 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PublicClient = undefined;
 
-var _utils = __webpack_require__(1);
+var _request = __webpack_require__(1);
 
-__webpack_require__(4);
+__webpack_require__(5);
 
 function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr2 = Array(arr.length); i < arr.length; i++) { arr2[i] = arr[i]; } return arr2; } else { return Array.from(arr); } }
 
 /**
  * Carto Public Client
  *
- * @param {Object} staticConfig
- * @param {string} staticConfig.baseUrl - User base url
+ * @param {Object} config
+ * @param {string} config.baseUrl - User base url
+ * @param {string} config.apiKey - User api key
  *
  * @namespace CartoApiClient.PublicClient
  * @return {PublicClient}
  */
 
 var PublicClient = exports.PublicClient = {
-  staticConfig: {
-    baseUrl: ''
+  config: {
+    baseUrl: '',
+    apiKey: null
   },
 
   /**
@@ -112,12 +114,8 @@ var PublicClient = exports.PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.get(['/api/v3', '/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -139,12 +137,8 @@ var PublicClient = exports.PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.put(['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -166,12 +160,8 @@ var PublicClient = exports.PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.post(['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -193,12 +183,8 @@ var PublicClient = exports.PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.delete(['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Array} path - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} options - request options
@@ -218,13 +204,13 @@ var PublicClient = exports.PublicClient = {
    * Set static config
    *
    * @memberof CartoApiClient.PublicClient
-   * @param {Object} staticConfig
-   * @param {string} staticConfig.baseUrl - User base url
+   * @param {Object} config
+   * @param {string} config.baseUrl - User base url
    *
    * @returns {Object} current PublicClient
    */
-  setStaticConfig: function setStaticConfig(staticConfig) {
-    this.staticConfig = staticConfig;
+  setConfig: function setConfig(config) {
+    this.config = config;
 
     return this;
   },
@@ -237,7 +223,29 @@ var PublicClient = exports.PublicClient = {
    * @returns {string} User's base url
    */
   getBaseUrl: function getBaseUrl() {
-    return this.staticConfig.baseUrl || '';
+    return this.config.baseUrl || '';
+  },
+
+
+  /**
+   * Get user's api key
+   *
+   * @memberof CartoApiClient.PublicClient
+   * @returns {string} User's api key
+   */
+  getApiKey: function getApiKey() {
+    return this.config.apiKey;
+  },
+
+
+  /**
+   * Get user's api key as a URL param if there is an api key
+   *
+   * @memberof CartoApiClient.PublicClient
+   * @returns {string} URL api key param
+   */
+  getApiKeyParam: function getApiKeyParam() {
+    return this.config.apiKey ? '?api_key=' + this.config.apiKey : '';
   },
 
 
@@ -255,9 +263,9 @@ var PublicClient = exports.PublicClient = {
         protocol = location.protocol,
         href = location.href;
 
-    var PATH = _utils.Utils.getPathFromHref(href);
+    var PATH = _request.RequestUtils.getPathFromHref(href);
 
-    this.staticConfig.baseUrl = protocol + '//' + host + PATH;
+    this.config.baseUrl = protocol + '//' + host + PATH;
 
     return this;
   },
@@ -269,12 +277,9 @@ var PublicClient = exports.PublicClient = {
    * @memberof CartoApiClient.PublicClient
    * @example
    * client.request('post', ['/api/v3/me'], options)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
    * @param {string} - request method
    * @param {Array} - an array of strings to build the request path, that will be added to the user's baseUrl
    * @param {Object} - request options
@@ -284,13 +289,14 @@ var PublicClient = exports.PublicClient = {
   request: function request(method, uriParts) {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
 
-    var baseUrl = this.getBaseUrl();
-    var url = _utils.Utils.makeRelativePath(uriParts);
-    var REQUEST_PATH = '' + baseUrl + url;
+    var BASE_URL = this.getBaseUrl();
+    var API_KEY = this.getApiKeyParam();
+    var PATH = _request.RequestUtils.getRelativeURIPath(uriParts);
 
-    _utils.Utils.addHeaders(options, method);
+    var URL = '' + BASE_URL + PATH + API_KEY;
+    var OPTIONS = _request.RequestUtils.getOptions(options, method);
 
-    return fetch(REQUEST_PATH, options).then(function (response) {
+    return fetch(URL, OPTIONS).then(function (response) {
       return response.json();
     });
   }
@@ -306,38 +312,36 @@ var PublicClient = exports.PublicClient = {
 Object.defineProperty(exports, "__esModule", {
   value: true
 });
-exports.Utils = undefined;
+exports.RequestUtils = undefined;
 
 var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
 
 var _request = __webpack_require__(3);
 
+var _general = __webpack_require__(4);
+
 var USER_REGEX = /(\/(u|user)\/[a-z0-9\-]+)\//;
 
-var Utils = exports.Utils = {
-  addHeaders: function addHeaders(options, method, additional) {
-    Object.assign(options, {
+var RequestUtils = exports.RequestUtils = {
+  getOptions: function getOptions(options, method, additional) {
+    return _extends({}, additional, options, {
       method: method.toUpperCase(),
       headers: _request.Request.Default.HEADERS,
       credentials: _request.Request.Default.CREDENTIALS
     });
-
-    return _extends({}, additional, options);
   },
   paramsToURI: function paramsToURI(params) {
     var DEFAULT_PARAMS = '';
 
-    return this.checkParams(params) ? '?' + Object.keys(params).map(function (key) {
+    return _general.Utils.isObject(params) ? this.stringifyParams(params) : DEFAULT_PARAMS;
+  },
+  stringifyParams: function stringifyParams(params) {
+    return '?' + Object.keys(params).map(function (key) {
       return encodeURIComponent(key) + '=' + encodeURIComponent(params[key]);
-    }).join('&') : DEFAULT_PARAMS;
+    }).join('&');
   },
-  checkParams: function checkParams(params) {
-    var OBJECT_TYPE = '[object Object]';
-
-    return params && Object.prototype.toString.call(params) === OBJECT_TYPE && Object.keys(params).length;
-  },
-  makeRelativePath: function makeRelativePath(parts) {
-    return '' + parts.join('/');
+  getRelativeURIPath: function getRelativeURIPath(uriParts) {
+    return _general.Utils.isArray(uriParts) ? '' + uriParts.join('/') : '';
   },
   getPathFromHref: function getPathFromHref(href) {
     var regExp = href.match(USER_REGEX);
@@ -358,9 +362,9 @@ Object.defineProperty(exports, "__esModule", {
 
 var _public = __webpack_require__(0);
 
-var _authenticated = __webpack_require__(5);
+var _authenticated = __webpack_require__(6);
 
-var _apiClient = __webpack_require__(7);
+var _apiClient = __webpack_require__(8);
 
 /**
  *
@@ -386,7 +390,7 @@ var _apiClient = __webpack_require__(7);
  *
  * @example
  * var CartoApiClient = require('carto-api-client');
- * var client = CartoApiClient.AuthenticatedClient.setStaticConfig({
+ * var client = CartoApiClient.AuthenticatedClient.setConfig({
  *   baseUrl: 'foobar.com'
  * });
  *
@@ -422,6 +426,29 @@ var Request = exports.Request = Object.freeze({
 
 /***/ }),
 /* 4 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var Utils = exports.Utils = {
+  isObject: function isObject(value) {
+    var OBJECT_TYPE = '[object Object]';
+
+    return value && Object.prototype.toString.call(value) === OBJECT_TYPE && Object.keys(value).length;
+  },
+  isArray: function isArray(value) {
+    var OBJECT_TYPE = '[object Array]';
+
+    return value && Object.prototype.toString.call(value) === OBJECT_TYPE;
+  }
+};
+
+/***/ }),
+/* 5 */
 /***/ (function(module, exports) {
 
 (function(self) {
@@ -888,7 +915,7 @@ var Request = exports.Request = Object.freeze({
 
 
 /***/ }),
-/* 5 */
+/* 6 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -903,9 +930,9 @@ var _extends = Object.assign || function (target) { for (var i = 1; i < argument
 
 var _public = __webpack_require__(0);
 
-var _paths = __webpack_require__(6);
+var _paths = __webpack_require__(7);
 
-var _utils = __webpack_require__(1);
+var _request = __webpack_require__(1);
 
 /**
  * Carto Authenticated Client
@@ -922,17 +949,13 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.getUser()
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @returns {Promise<object>} fetch user data in json format
    */
   getUser: function getUser(params) {
-    var URI_PARAMS = _utils.Utils.paramsToURI(params);
+    var URI_PARAMS = _request.RequestUtils.paramsToURI(params);
 
     return this.get([_paths.Paths.CONFIG, URI_PARAMS]);
   },
@@ -944,12 +967,8 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.deleteUser(payload)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Object} payload
    * @param {Object} payload.deletion_password_confirmation - user's password
@@ -969,12 +988,8 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.updateUser(payload)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Object} payload
    * @param {string} payload.user
@@ -1001,12 +1016,8 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
    * client.getVisualization(vizID, params)
-   *   .then(function (data) {
-   *     console.log(data);
-   *   })
-   *   .catch(function (error) {
-   *     console.log(error);
-   *   });
+   *   .then(console.log)
+   *   .catch(console.error);
    *
    * @param {Object} params - set the different params so they can be added to the response object
    * @param {boolean} params.fetch_related_canonical_visualizations
@@ -1047,24 +1058,24 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    */
   getVisualization: function getVisualization(vizID, params) {
     var VIZ_PATH = '/' + vizID;
-    var URI_PARAMS = _utils.Utils.paramsToURI(params);
+    var URI_PARAMS = _request.RequestUtils.paramsToURI(params);
 
     return this.get([_paths.Paths.VIZ, VIZ_PATH, URI_PARAMS]);
   },
   getVisualizations: function getVisualizations(params) {
-    var URI_PARAMS = _utils.Utils.paramsToURI(params);
+    var URI_PARAMS = _request.RequestUtils.paramsToURI(params);
 
     return this.get([_paths.Paths.VIZ, URI_PARAMS]);
   },
   getMap: function getMap(mapID, params) {
     var MAP_PATH = '/' + mapID;
-    var URI_PARAMS = _utils.Utils.paramsToURI(params);
+    var URI_PARAMS = _request.RequestUtils.paramsToURI(params);
     return this.get([_paths.Paths.MAPS, MAP_PATH, URI_PARAMS]);
   }
 });
 
 /***/ }),
-/* 6 */
+/* 7 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
@@ -1096,7 +1107,7 @@ var Paths = exports.Paths = Object.freeze({
 });
 
 /***/ }),
-/* 7 */
+/* 8 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";

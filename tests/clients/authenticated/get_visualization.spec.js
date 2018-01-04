@@ -29,7 +29,7 @@ describe('AuthenticatedClient', function () {
     chai.use(sinonChai);
     this.sinon = sandbox = sinon.sandbox.create();
 
-    client.setStaticConfig(StaticConfig);
+    client.setConfig(StaticConfig);
   });
 
   afterEach(function () {
@@ -47,7 +47,7 @@ describe('AuthenticatedClient', function () {
       };
 
       client
-        .setStaticConfig(StaticConfig)
+        .setConfig(StaticConfig)
         .getVisualization('vizId', params)
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
@@ -65,7 +65,7 @@ describe('AuthenticatedClient', function () {
       };
 
       client
-        .setStaticConfig(StaticConfig)
+        .setConfig(StaticConfig)
         .getVisualization('vizId', params)
         .catch(() => {
           expect(fetchErrorStub).to.have.been.called;

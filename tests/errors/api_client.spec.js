@@ -25,14 +25,14 @@ const StaticConfig = {
 
 const client = CartoApiClient.AuthenticatedClient;
 
-describe('AuthenticatedClient', function () {
+describe('ApiClientError', function () {
   let sandbox;
 
   beforeEach(function () {
     chai.use(sinonChai);
     this.sinon = sandbox = sinon.sandbox.create();
 
-    client.setStaticConfig(StaticConfig);
+    client.setConfig(StaticConfig);
   });
 
   afterEach(function () {
@@ -46,7 +46,7 @@ describe('AuthenticatedClient', function () {
         .returns(Promise.resolve(expectedResponse));
 
       client
-        .setStaticConfig(StaticConfig)
+        .setConfig(StaticConfig)
         .getUser()
         .then((data) => {
           throw CartoApiClient.ApiClientError.send(data);

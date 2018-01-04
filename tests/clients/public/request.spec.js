@@ -4,6 +4,7 @@ import sinonChai from 'sinon-chai';
 import CartoApiClient from '../../../src/index.js';
 
 const BASE_URL = 'https://matallo.carto.com';
+const API_KEY = '1234567';
 const expect = chai.expect;
 
 const expectedResponse = {
@@ -16,35 +17,33 @@ const errorResponse = {
   message: 'Error Response'
 };
 
-const StaticConfig = {
-  baseUrl: BASE_URL
-};
+const client = CartoApiClient.PublicClient;
 
-const client = CartoApiClient.AuthenticatedClient;
-
-describe('AuthenticatedClient', function () {
+describe('PublicClient', function () {
   let sandbox;
 
   beforeEach(function () {
     chai.use(sinonChai);
     this.sinon = sandbox = sinon.sandbox.create();
-
-    client.setConfig(StaticConfig);
   });
 
   afterEach(function () {
     sandbox.restore();
   });
 
-  describe('.getUser', () => {
-    it('should get user config', function (done) {
+  describe('.request', () => {
+    it('should be able to send a request', function (done) {
       const fetchResponseStub = sandbox
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
+      const StaticConfig = {
+        baseUrl: BASE_URL
+      };
+
       client
         .setConfig(StaticConfig)
-        .getUser()
+        .request('get')
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
           done();
@@ -56,12 +55,38 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
+      const StaticConfig = {
+        baseUrl: BASE_URL
+      };
+
       client
         .setConfig(StaticConfig)
-        .getUser()
+        .request('get')
         .catch((error) => {
           expect(fetchErrorStub).to.have.been.called;
           expect(error).to.be.equal(errorResponse);
+          done();
+        });
+    });
+
+    it('should add the api key to the request if present', function (done) {
+      const fetchResponseStub = sandbox
+        .stub(window, 'fetch')
+        .returns(Promise.resolve(expectedResponse));
+
+      const StaticConfig = {
+        baseUrl: BASE_URL,
+        apiKey: API_KEY
+      };
+
+      client
+        .setConfig(StaticConfig)
+        .request('get')
+        .then(() => {
+          const url = fetchResponseStub.getCall(0).args[0];
+          const containsApiKey = url.indexOf(API_KEY) !== -1;
+
+          expect(containsApiKey).to.be.ok;
           done();
         });
     });

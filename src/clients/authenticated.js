@@ -1,6 +1,6 @@
 import { PublicClient } from './public';
 import { Paths } from '../constants/paths';
-import { Utils } from '../utils/utils';
+import { RequestUtils } from '../utils/request';
 
 /**
  * Carto Authenticated Client
@@ -24,7 +24,7 @@ export const AuthenticatedClient = {
    * @returns {Promise<object>} fetch user data in json format
    */
   getUser (params) {
-    const URI_PARAMS = Utils.paramsToURI(params);
+    const URI_PARAMS = RequestUtils.paramsToURI(params);
 
     return this.get([Paths.CONFIG, URI_PARAMS]);
   },
@@ -124,20 +124,20 @@ export const AuthenticatedClient = {
    */
   getVisualization (vizID, params) {
     const VIZ_PATH = `/${vizID}`;
-    const URI_PARAMS = Utils.paramsToURI(params);
+    const URI_PARAMS = RequestUtils.paramsToURI(params);
 
     return this.get([Paths.VIZ, VIZ_PATH, URI_PARAMS]);
   },
 
   getVisualizations (params) {
-    const URI_PARAMS = Utils.paramsToURI(params);
+    const URI_PARAMS = RequestUtils.paramsToURI(params);
 
     return this.get([Paths.VIZ, URI_PARAMS]);
   },
 
   getMap (mapID, params) {
     const MAP_PATH = `/${mapID}`;
-    const URI_PARAMS = Utils.paramsToURI(params);
+    const URI_PARAMS = RequestUtils.paramsToURI(params);
     return this.get([Paths.MAPS, MAP_PATH, URI_PARAMS]);
   }
 };

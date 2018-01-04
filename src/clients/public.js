@@ -1,20 +1,22 @@
-import { Utils } from '../utils/utils';
+import { RequestUtils } from '../utils/request';
 
 import 'whatwg-fetch';
 
 /**
  * Carto Public Client
  *
- * @param {Object} staticConfig
- * @param {string} staticConfig.baseUrl - User base url
+ * @param {Object} config
+ * @param {string} config.baseUrl - User base url
+ * @param {string} config.apiKey - User api key
  *
  * @namespace CartoApiClient.PublicClient
  * @return {PublicClient}
  */
 
 export const PublicClient = {
-  staticConfig: {
-    baseUrl: ''
+  config: {
+    baseUrl: '',
+    apiKey: null
   },
 
   /**
@@ -93,13 +95,13 @@ export const PublicClient = {
    * Set static config
    *
    * @memberof CartoApiClient.PublicClient
-   * @param {Object} staticConfig
-   * @param {string} staticConfig.baseUrl - User base url
+   * @param {Object} config
+   * @param {string} config.baseUrl - User base url
    *
    * @returns {Object} current PublicClient
    */
-  setStaticConfig (staticConfig) {
-    this.staticConfig = staticConfig;
+  setConfig (config) {
+    this.config = config;
 
     return this;
   },
@@ -111,7 +113,29 @@ export const PublicClient = {
    * @returns {string} User's base url
    */
   getBaseUrl () {
-    return this.staticConfig.baseUrl || '';
+    return this.config.baseUrl || '';
+  },
+
+  /**
+   * Get user's api key
+   *
+   * @memberof CartoApiClient.PublicClient
+   * @returns {string} User's api key
+   */
+  getApiKey () {
+    return this.config.apiKey;
+  },
+
+  /**
+   * Get user's api key as a URL param if there is an api key
+   *
+   * @memberof CartoApiClient.PublicClient
+   * @returns {string} URL api key param
+   */
+  getApiKeyParam () {
+    return this.config.apiKey
+      ? `?api_key=${this.config.apiKey}`
+      : '';
   },
 
   /**
@@ -125,9 +149,9 @@ export const PublicClient = {
    */
   setClientBaseUrlFromLocation (location) {
     const { host, protocol, href } = location;
-    const PATH = Utils.getPathFromHref(href);
+    const PATH = RequestUtils.getPathFromHref(href);
 
-    this.staticConfig.baseUrl = `${protocol}//${host}${PATH}`;
+    this.config.baseUrl = `${protocol}//${host}${PATH}`;
 
     return this;
   },
@@ -148,13 +172,14 @@ export const PublicClient = {
    * @returns {Promise} fetch response in json format
    */
   request (method, uriParts, options = {}) {
-    const baseUrl = this.getBaseUrl();
-    const url = Utils.makeRelativePath(uriParts);
-    const REQUEST_PATH = `${baseUrl}${url}`;
+    const BASE_URL = this.getBaseUrl();
+    const API_KEY = this.getApiKeyParam();
+    const PATH = RequestUtils.getRelativeURIPath(uriParts);
 
-    Utils.addHeaders(options, method);
+    const URL = `${BASE_URL}${PATH}${API_KEY}`;
+    const OPTIONS = RequestUtils.getOptions(options, method);
 
-    return fetch(REQUEST_PATH, options)
+    return fetch(URL, OPTIONS)
       .then(response => response.json());
   }
 };

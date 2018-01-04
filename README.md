@@ -41,7 +41,7 @@ JS
 
 ```js
 var Carto = require('carto-api-client');
-var client = Carto.AuthenticatedClient.setStaticConfig({
+var client = Carto.AuthenticatedClient.setConfig({
   baseUrl: 'foobar.com'
 });
 
@@ -54,7 +54,7 @@ ES6
 
 ```js
 import Carto from 'carto-api-client';
-const client = Carto.AuthenticatedClient.setStaticConfig({
+const client = Carto.AuthenticatedClient.setConfig({
   baseUrl: 'foobar.com'
 });
 

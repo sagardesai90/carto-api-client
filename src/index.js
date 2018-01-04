@@ -26,8 +26,9 @@ import { ApiClientError } from './errors/api-client';
  *
  * @example
  * var CartoApiClient = require('carto-api-client');
- * var client = CartoApiClient.AuthenticatedClient.setStaticConfig({
- *   baseUrl: 'foobar.com'
+ * var client = CartoApiClient.AuthenticatedClient.setConfig({
+ *   baseUrl: 'foobar.com',
+ *   apiKey: '1234567' // optional
  * });
  *
  * client.getUser()

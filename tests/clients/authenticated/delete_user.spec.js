@@ -2,7 +2,7 @@ import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
 import CartoApiClient from '../../../src/index.js';
-import { Utils } from '../../../src/utils/utils.js';
+import { RequestUtils } from '../../../src/utils/request.js';
 
 const BASE_URL = 'https://matallo.carto.com';
 const expect = chai.expect;
@@ -30,7 +30,7 @@ describe('AuthenticatedClient', function () {
     chai.use(sinonChai);
     this.sinon = sandbox = sinon.sandbox.create();
 
-    client.setStaticConfig(StaticConfig);
+    client.setConfig(StaticConfig);
   });
 
   afterEach(function () {
@@ -48,7 +48,7 @@ describe('AuthenticatedClient', function () {
       };
 
       client
-        .setStaticConfig(StaticConfig)
+        .setConfig(StaticConfig)
         .deleteUser(payload)
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
@@ -66,7 +66,7 @@ describe('AuthenticatedClient', function () {
       };
 
       client
-        .setStaticConfig(StaticConfig)
+        .setConfig(StaticConfig)
         .deleteUser(payload)
         .catch((error) => {
           expect(fetchErrorStub).to.have.been.called;
@@ -86,14 +86,14 @@ describe('AuthenticatedClient', function () {
         body: JSON.stringify(payload)
       };
 
-      const options = Utils.addHeaders(payloadOptions, 'delete');
+      const options = RequestUtils.getOptions(payloadOptions, 'delete');
 
       sandbox
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
       client
-        .setStaticConfig(StaticConfig)
+        .setConfig(StaticConfig)
         .deleteUser(payload)
         .then(() => {
           expect(clientPutRequestSpy.withArgs(options)).to.be.ok;
