@@ -85,6 +85,8 @@ Object.defineProperty(exports, "__esModule", {
 });
 exports.PublicClient = undefined;
 
+var _extends = Object.assign || function (target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i]; for (var key in source) { if (Object.prototype.hasOwnProperty.call(source, key)) { target[key] = source[key]; } } } return target; };
+
 var _request = __webpack_require__(1);
 
 __webpack_require__(5);
@@ -210,17 +212,28 @@ var PublicClient = exports.PublicClient = {
    * @returns {Object} current PublicClient
    */
   setConfig: function setConfig(config) {
-    this.config = config;
+    this.config = _extends({}, this.config, config);
 
     return this;
   },
 
 
   /**
-   * Get user's base url
+   * Get config
    *
    * @memberof CartoApiClient.PublicClient
-   * @returns {string} User's base url
+   * @returns {string} Client config
+   */
+  getConfig: function getConfig() {
+    return this.config;
+  },
+
+
+  /**
+   * Get baseUrl
+   *
+   * @memberof CartoApiClient.PublicClient
+   * @returns {string} Client baseUrl
    */
   getBaseUrl: function getBaseUrl() {
     return this.config.baseUrl || '';
@@ -228,13 +241,13 @@ var PublicClient = exports.PublicClient = {
 
 
   /**
-   * Get user's api key
+   * Get apiKey
    *
    * @memberof CartoApiClient.PublicClient
-   * @returns {string} User's api key
+   * @returns {string} Client apiKey
    */
   getApiKey: function getApiKey() {
-    return this.config.apiKey;
+    return this.config.apiKey || '';
   },
 
 
@@ -288,10 +301,11 @@ var PublicClient = exports.PublicClient = {
    */
   request: function request(method, uriParts) {
     var options = arguments.length > 2 && arguments[2] !== undefined ? arguments[2] : {};
+    var baseUrl = arguments[3];
 
-    var BASE_URL = this.getBaseUrl();
-    var API_KEY = this.getApiKeyParam();
     var PATH = _request.RequestUtils.getRelativeURIPath(uriParts);
+    var API_KEY = this.getApiKeyParam();
+    var BASE_URL = baseUrl || this.getBaseUrl();
 
     var URL = '' + BASE_URL + PATH + API_KEY;
     var OPTIONS = _request.RequestUtils.getOptions(options, method);
@@ -391,7 +405,8 @@ var _apiClient = __webpack_require__(8);
  * @example
  * var CartoApiClient = require('carto-api-client');
  * var client = CartoApiClient.AuthenticatedClient.setConfig({
- *   baseUrl: 'foobar.com'
+ *   baseUrl: 'foobar.com',
+ *   apiKey: '1234567' // optional
  * });
  *
  * client.getUser()
@@ -1011,7 +1026,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
 
 
   /**
-   * Get a visualization
+   * Get a user's visualization
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
@@ -1062,14 +1077,190 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
 
     return this.get([_paths.Paths.VIZ, VIZ_PATH, URI_PARAMS]);
   },
+
+
+  /**
+   * Get user's visualizations
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizations(params)
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @param {Object} params - set the different params so they can be added to the response object
+   * @param {boolean} params.fetch_related_canonical_visualizations
+   * @param {boolean} params.fetch_user
+   * @param {boolean} params.load_related_canonical_visualizations
+   * @param {boolean} params.related
+   * @param {boolean} params.show_auth_tokens
+   * @param {boolean} params.show_liked
+   * @param {boolean} params.show_likes
+   * @param {boolean} params.show_permission
+   * @param {boolean} params.show_stats
+   * @param {boolean} params.show_synchronization
+   * @param {boolean} params.show_table
+   * @param {boolean} params.show_table_size_and_row_count
+   * @param {boolean} params.show_user
+   * @param {boolean} params.show_user_basemaps
+   * @param {boolean} params.show_uses_builder_features
+   * @param {string} params.password
+   *
+   * @param {Array} params.types
+   * @param {boolean} params.bbox
+   * @param {boolean} params.exclude_raster (default: true)
+   * @param {boolean} params.exclude_shared (default: true)
+   * @param {boolean} params.locked
+   * @param {boolean} params.only_liked (default: true)
+   * @param {boolean} params.only_shared (default: true)
+   * @param {boolean} params.only_with_display_name (default: true)
+   * @param {boolean} params.shared
+   * @param {boolean} params.tags
+   * @param {boolean} params.with_id_or_name
+   * @param {number} params.page
+   * @param {number} params.per_page
+   * @param {string} params.order
+   * @param {string} params.privacy
+   * @param {string} params.type
+   *
+   * @returns {Promise<object>} fetch response in json format
+   */
   getVisualizations: function getVisualizations(params) {
     var URI_PARAMS = _request.RequestUtils.paramsToURI(params);
 
     return this.get([_paths.Paths.VIZ, URI_PARAMS]);
   },
+
+
+  /**
+   * Get visualization likes
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationLikes()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} likes in json format
+   */
+
+  getVisualizationLikes: function getVisualizationLikes(vizID) {
+    var VIZ_PATH = '/' + vizID;
+
+    return this.get([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.LIKES]);
+  },
+
+
+  /**
+   * Get visualization likes detailed list
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationLikesDetailed()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} detailed likes in json format
+   */
+  getVisualizationLikesDetailed: function getVisualizationLikesDetailed(vizID) {
+    var VIZ_PATH = '/' + vizID;
+
+    return this.get([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.LIKES_DETAILED]);
+  },
+
+
+  /**
+   * Get visualization like information
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationLike()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} like information in json format
+   */
+  getVisualizationLike: function getVisualizationLike(vizID) {
+    var VIZ_PATH = '/' + vizID;
+
+    return this.get([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.LIKE]);
+  },
+
+
+  /**
+   * Like a visualization by id
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.likeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} like information in json format
+   */
+  likeVisualization: function likeVisualization(vizID) {
+    var VIZ_PATH = '/' + vizID;
+
+    return this.post([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.LIKE]);
+  },
+
+
+  /**
+   * Unlike a visualization by id
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.unlikeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} unlike information in json format
+   */
+  unlikeVisualization: function unlikeVisualization(vizID) {
+    var VIZ_PATH = '/' + vizID;
+
+    return this.delete([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.LIKE]);
+  },
+
+
+  /**
+   * Get watching information for a visualization
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.unlikeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} watching list in json format
+   */
+  getVisualizationWatching: function getVisualizationWatching(vizID) {
+    var VIZ_PATH = '/' + vizID;
+
+    return this.get([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.WATCHING]);
+  },
+
+
+  /**
+   * Get watching information for a visualization
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.unlikeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} watching list in json format
+   */
+  notifyVisualizationWatching: function notifyVisualizationWatching(vizID) {
+    var VIZ_PATH = '/' + vizID;
+
+    return this.put([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.WATCHING]);
+  },
   getMap: function getMap(mapID, params) {
     var MAP_PATH = '/' + mapID;
     var URI_PARAMS = _request.RequestUtils.paramsToURI(params);
+
     return this.get([_paths.Paths.MAPS, MAP_PATH, URI_PARAMS]);
   }
 });
@@ -1089,7 +1280,11 @@ var ApiDataPath = exports.ApiDataPath = Object.freeze({
   CONFIG: '/me',
   TABLES: '/tables',
   VIZ: '/viz',
-  MAPS: '/maps'
+  MAPS: '/maps',
+  LIKE: '/like',
+  LIKES: '/likes',
+  LIKES_DETAILED: '/likes/detailed',
+  WATCHING: '/watching'
 });
 
 var ApiVersionPath = exports.ApiVersionPath = Object.freeze({

@@ -1,8 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import CartoApiClient from '../../../src/index.js';
-import { RequestUtils } from '../../../src/utils/request.js';
+import CartoApiClient from '../../../../src/index.js';
 
 const BASE_URL = 'https://matallo.carto.com';
 const expect = chai.expect;
@@ -37,19 +36,19 @@ describe('AuthenticatedClient', function () {
     sandbox.restore();
   });
 
-  describe('.deleteUser', () => {
-    it('should be able to delete a user', function (done) {
+  describe('.getVisualization', () => {
+    it('should get a visualization', function (done) {
       const fetchResponseStub = sandbox
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
-      const payload = {
-        deletion_password_confirmation: '1234567'
+      const params = {
+        per_page: 1
       };
 
       client
         .setConfig(StaticConfig)
-        .deleteUser(payload)
+        .getVisualization('vizId', params)
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
           done();
@@ -61,42 +60,15 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
-      const payload = {
-        deletion_password_confirmation: '1234567'
+      const params = {
+        per_page: 1
       };
 
       client
         .setConfig(StaticConfig)
-        .deleteUser(payload)
-        .catch((error) => {
+        .getVisualization('vizId', params)
+        .catch(() => {
           expect(fetchErrorStub).to.have.been.called;
-          expect(error).to.be.equal(errorResponse);
-          done();
-        });
-    });
-
-    it('should add a "body" field with the request payload', function (done) {
-      const clientPutRequestSpy = sinon.spy(client, 'delete');
-
-      const payload = {
-        deletion_password_confirmation: '1234567'
-      };
-
-      const payloadOptions = {
-        body: JSON.stringify(payload)
-      };
-
-      const options = RequestUtils.getOptions(payloadOptions, 'delete');
-
-      sandbox
-        .stub(window, 'fetch')
-        .returns(Promise.resolve(expectedResponse));
-
-      client
-        .setConfig(StaticConfig)
-        .deleteUser(payload)
-        .then(() => {
-          expect(clientPutRequestSpy.withArgs(options)).to.be.ok;
           done();
         });
     });

@@ -1,7 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import CartoApiClient from '../../../src/index.js';
+import CartoApiClient from '../../../../src/index.js';
 
 const BASE_URL = 'https://matallo.carto.com';
 const expect = chai.expect;
@@ -36,19 +36,15 @@ describe('AuthenticatedClient', function () {
     sandbox.restore();
   });
 
-  describe('.getVisualization', () => {
-    it('should get a visualization', function (done) {
+  describe('.getVisualizationWatching', () => {
+    it('should get watching information for a visualization', function (done) {
       const fetchResponseStub = sandbox
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
-      const params = {
-        per_page: 1
-      };
-
       client
         .setConfig(StaticConfig)
-        .getVisualization('vizId', params)
+        .getVisualizationWatching('vizId')
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
           done();
@@ -60,13 +56,9 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
-      const params = {
-        per_page: 1
-      };
-
       client
         .setConfig(StaticConfig)
-        .getVisualization('vizId', params)
+        .getVisualizationWatching('vizId')
         .catch(() => {
           expect(fetchErrorStub).to.have.been.called;
           done();

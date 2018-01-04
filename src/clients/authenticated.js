@@ -1,5 +1,5 @@
 import { PublicClient } from './public';
-import { Paths } from '../constants/paths';
+import { ApiDataPath, Paths } from '../constants/paths';
 import { RequestUtils } from '../utils/request';
 
 /**
@@ -77,7 +77,7 @@ export const AuthenticatedClient = {
   },
 
   /**
-   * Get a visualization
+   * Get a user's visualization
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
@@ -129,15 +129,182 @@ export const AuthenticatedClient = {
     return this.get([Paths.VIZ, VIZ_PATH, URI_PARAMS]);
   },
 
+  /**
+   * Get user's visualizations
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizations(params)
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @param {Object} params - set the different params so they can be added to the response object
+   * @param {boolean} params.fetch_related_canonical_visualizations
+   * @param {boolean} params.fetch_user
+   * @param {boolean} params.load_related_canonical_visualizations
+   * @param {boolean} params.related
+   * @param {boolean} params.show_auth_tokens
+   * @param {boolean} params.show_liked
+   * @param {boolean} params.show_likes
+   * @param {boolean} params.show_permission
+   * @param {boolean} params.show_stats
+   * @param {boolean} params.show_synchronization
+   * @param {boolean} params.show_table
+   * @param {boolean} params.show_table_size_and_row_count
+   * @param {boolean} params.show_user
+   * @param {boolean} params.show_user_basemaps
+   * @param {boolean} params.show_uses_builder_features
+   * @param {string} params.password
+   *
+   * @param {Array} params.types
+   * @param {boolean} params.bbox
+   * @param {boolean} params.exclude_raster (default: true)
+   * @param {boolean} params.exclude_shared (default: true)
+   * @param {boolean} params.locked
+   * @param {boolean} params.only_liked (default: true)
+   * @param {boolean} params.only_shared (default: true)
+   * @param {boolean} params.only_with_display_name (default: true)
+   * @param {boolean} params.shared
+   * @param {boolean} params.tags
+   * @param {boolean} params.with_id_or_name
+   * @param {number} params.page
+   * @param {number} params.per_page
+   * @param {string} params.order
+   * @param {string} params.privacy
+   * @param {string} params.type
+   *
+   * @returns {Promise<object>} fetch response in json format
+   */
   getVisualizations (params) {
     const URI_PARAMS = RequestUtils.paramsToURI(params);
 
     return this.get([Paths.VIZ, URI_PARAMS]);
   },
 
+  /**
+   * Get visualization likes
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationLikes()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} likes in json format
+   */
+
+  getVisualizationLikes (vizID) {
+    const VIZ_PATH = `/${vizID}`;
+
+    return this.get([Paths.VIZ, VIZ_PATH, ApiDataPath.LIKES]);
+  },
+
+  /**
+   * Get visualization likes detailed list
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationLikesDetailed()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} detailed likes in json format
+   */
+  getVisualizationLikesDetailed (vizID) {
+    const VIZ_PATH = `/${vizID}`;
+
+    return this.get([Paths.VIZ, VIZ_PATH, ApiDataPath.LIKES_DETAILED]);
+  },
+
+  /**
+   * Get visualization like information
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationLike()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} like information in json format
+   */
+  getVisualizationLike (vizID) {
+    const VIZ_PATH = `/${vizID}`;
+
+    return this.get([Paths.VIZ, VIZ_PATH, ApiDataPath.LIKE]);
+  },
+
+  /**
+   * Like a visualization by id
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.likeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} like information in json format
+   */
+  likeVisualization (vizID) {
+    const VIZ_PATH = `/${vizID}`;
+
+    return this.post([Paths.VIZ, VIZ_PATH, ApiDataPath.LIKE]);
+  },
+
+  /**
+   * Unlike a visualization by id
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.unlikeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} unlike information in json format
+   */
+  unlikeVisualization (vizID) {
+    const VIZ_PATH = `/${vizID}`;
+
+    return this.delete([Paths.VIZ, VIZ_PATH, ApiDataPath.LIKE]);
+  },
+
+  /**
+   * Get watching information for a visualization
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.unlikeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} watching list in json format
+   */
+  getVisualizationWatching (vizID) {
+    const VIZ_PATH = `/${vizID}`;
+
+    return this.get([Paths.VIZ, VIZ_PATH, ApiDataPath.WATCHING]);
+  },
+
+  /**
+   * Get watching information for a visualization
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.unlikeVisualization()
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} watching list in json format
+   */
+  notifyVisualizationWatching (vizID) {
+    const VIZ_PATH = `/${vizID}`;
+
+    return this.put([Paths.VIZ, VIZ_PATH, ApiDataPath.WATCHING]);
+  },
+
   getMap (mapID, params) {
     const MAP_PATH = `/${mapID}`;
     const URI_PARAMS = RequestUtils.paramsToURI(params);
+
     return this.get([Paths.MAPS, MAP_PATH, URI_PARAMS]);
   }
 };

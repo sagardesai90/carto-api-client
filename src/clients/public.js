@@ -101,29 +101,42 @@ export const PublicClient = {
    * @returns {Object} current PublicClient
    */
   setConfig (config) {
-    this.config = config;
+    this.config = {
+      ...this.config,
+      ...config
+    };
 
     return this;
   },
 
   /**
-   * Get user's base url
+   * Get config
    *
    * @memberof CartoApiClient.PublicClient
-   * @returns {string} User's base url
+   * @returns {string} Client config
+   */
+  getConfig () {
+    return this.config;
+  },
+
+  /**
+   * Get baseUrl
+   *
+   * @memberof CartoApiClient.PublicClient
+   * @returns {string} Client baseUrl
    */
   getBaseUrl () {
     return this.config.baseUrl || '';
   },
 
   /**
-   * Get user's api key
+   * Get apiKey
    *
    * @memberof CartoApiClient.PublicClient
-   * @returns {string} User's api key
+   * @returns {string} Client apiKey
    */
   getApiKey () {
-    return this.config.apiKey;
+    return this.config.apiKey || '';
   },
 
   /**
@@ -171,10 +184,10 @@ export const PublicClient = {
    *
    * @returns {Promise} fetch response in json format
    */
-  request (method, uriParts, options = {}) {
-    const BASE_URL = this.getBaseUrl();
-    const API_KEY = this.getApiKeyParam();
+  request (method, uriParts, options = {}, baseUrl) {
     const PATH = RequestUtils.getRelativeURIPath(uriParts);
+    const API_KEY = this.getApiKeyParam();
+    const BASE_URL = baseUrl || this.getBaseUrl();
 
     const URL = `${BASE_URL}${PATH}${API_KEY}`;
     const OPTIONS = RequestUtils.getOptions(options, method);

@@ -1,8 +1,7 @@
 import chai from 'chai';
 import sinon from 'sinon';
 import sinonChai from 'sinon-chai';
-import CartoApiClient from '../../../src/index.js';
-import { RequestUtils } from '../../../src/utils/request.js';
+import CartoApiClient from '../../../../src/index.js';
 
 const BASE_URL = 'https://matallo.carto.com';
 const expect = chai.expect;
@@ -37,21 +36,15 @@ describe('AuthenticatedClient', function () {
     sandbox.restore();
   });
 
-  describe('.updateUser', () => {
-    it('should update user information', function (done) {
+  describe('.getUser', () => {
+    it('should get user config', function (done) {
       const fetchResponseStub = sandbox
         .stub(window, 'fetch')
         .returns(Promise.resolve(expectedResponse));
 
-      const payload = {
-        user: {
-          email: 'user@email.com'
-        }
-      };
-
       client
         .setConfig(StaticConfig)
-        .updateUser(payload)
+        .getUser()
         .then((data) => {
           expect(fetchResponseStub).to.have.been.called;
           done();
@@ -63,46 +56,12 @@ describe('AuthenticatedClient', function () {
         .stub(window, 'fetch')
         .returns(Promise.reject(errorResponse));
 
-      const payload = {
-        user: {
-          email: 'user@email.com'
-        }
-      };
-
       client
         .setConfig(StaticConfig)
-        .updateUser(payload)
+        .getUser()
         .catch((error) => {
           expect(fetchErrorStub).to.have.been.called;
           expect(error).to.be.equal(errorResponse);
-          done();
-        });
-    });
-
-    it('should add a "body" field with the request payload', function (done) {
-      const clientPutRequestSpy = sinon.spy(client, 'put');
-
-      const payload = {
-        user: {
-          email: 'user@email.com'
-        }
-      };
-
-      const payloadOptions = {
-        body: JSON.stringify(payload)
-      };
-
-      const options = RequestUtils.getOptions(payloadOptions, 'put');
-
-      sandbox
-        .stub(window, 'fetch')
-        .returns(Promise.resolve(expectedResponse));
-
-      client
-        .setConfig(StaticConfig)
-        .updateUser(payload)
-        .then(() => {
-          expect(clientPutRequestSpy.withArgs(options)).to.be.ok;
           done();
         });
     });

@@ -3,7 +3,11 @@ export const ApiDataPath = Object.freeze({
   CONFIG: '/me',
   TABLES: '/tables',
   VIZ: '/viz',
-  MAPS: '/maps'
+  MAPS: '/maps',
+  LIKE: '/like',
+  LIKES: '/likes',
+  LIKES_DETAILED: '/likes/detailed',
+  WATCHING: '/watching'
 });
 
 export const ApiVersionPath = Object.freeze({

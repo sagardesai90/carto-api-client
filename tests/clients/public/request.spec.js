@@ -45,7 +45,11 @@ describe('PublicClient', function () {
         .setConfig(StaticConfig)
         .request('get')
         .then((data) => {
+          const url = fetchResponseStub.getCall(0).args[0];
+          const containsBaseUrl = url.indexOf(BASE_URL) !== -1;
+
           expect(fetchResponseStub).to.have.been.called;
+          expect(containsBaseUrl).to.be.ok;
           done();
         });
     });
@@ -87,6 +91,30 @@ describe('PublicClient', function () {
           const containsApiKey = url.indexOf(API_KEY) !== -1;
 
           expect(containsApiKey).to.be.ok;
+          done();
+        });
+    });
+
+    it('should make the request to the given baseUrl if present', function (done) {
+      const fetchResponseStub = sandbox
+        .stub(window, 'fetch')
+        .returns(Promise.resolve(expectedResponse));
+
+      const StaticConfig = {
+        baseUrl: BASE_URL,
+        apiKey: API_KEY
+      };
+
+      const REQUEST_BASE_URL = 'https://user.carto.com';
+
+      client
+        .setConfig(StaticConfig)
+        .request('get', [], {}, REQUEST_BASE_URL)
+        .then(() => {
+          const url = fetchResponseStub.getCall(0).args[0];
+          const containsBaseUrl = url.indexOf(REQUEST_BASE_URL) !== -1;
+
+          expect(containsBaseUrl).to.be.ok;
           done();
         });
     });
