@@ -1137,7 +1137,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getVisualizationLikes()
+   * client.getVisualizationLikes('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -1156,7 +1156,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getVisualizationLikesDetailed()
+   * client.getVisualizationLikesDetailed('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -1174,7 +1174,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getVisualizationLike()
+   * client.getVisualizationLike('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -1192,7 +1192,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.likeVisualization()
+   * client.likeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -1210,7 +1210,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.unlikeVisualization()
+   * client.unlikeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -1228,7 +1228,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.unlikeVisualization()
+   * client.unlikeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -1246,7 +1246,7 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.unlikeVisualization()
+   * client.unlikeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -1256,6 +1256,26 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
     var VIZ_PATH = '/' + vizID;
 
     return this.put([_paths.Paths.VIZ, VIZ_PATH, _paths.ApiDataPath.WATCHING]);
+  },
+
+
+  /**
+   * Get a preview of a visualization
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationPreview('vizID', 200, 200)
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} visualization image
+   */
+  getVisualizationPreview: function getVisualizationPreview(vizID, width, height) {
+    var VIZ_PATH = '/' + vizID;
+    var WIDTH_PATH = '/' + width;
+    var HEIGHT_PATH = '/' + height;
+
+    return this.get([_paths.Paths.VIZ_PREVIEW, VIZ_PATH, _paths.ApiDataPath.STATIC, WIDTH_PATH, HEIGHT_PATH, _paths.ApiDataPath.PNG_EXTENSION]);
   },
   getMap: function getMap(mapID, params) {
     var MAP_PATH = '/' + mapID;
@@ -1284,7 +1304,9 @@ var ApiDataPath = exports.ApiDataPath = Object.freeze({
   LIKE: '/like',
   LIKES: '/likes',
   LIKES_DETAILED: '/likes/detailed',
-  WATCHING: '/watching'
+  WATCHING: '/watching',
+  STATIC: '/static',
+  PNG_EXTENSION: '.png'
 });
 
 var ApiVersionPath = exports.ApiVersionPath = Object.freeze({
@@ -1298,7 +1320,8 @@ var Paths = exports.Paths = Object.freeze({
   CONFIG: '' + ApiVersionPath.API_V3_URI + ApiDataPath.CONFIG,
   TABLES: '' + ApiVersionPath.API_V1_URI + ApiDataPath.TABLES,
   VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ,
-  MAPS: '' + ApiVersionPath.API_V1_URI + ApiDataPath.MAPS
+  MAPS: '' + ApiVersionPath.API_V1_URI + ApiDataPath.MAPS,
+  VIZ_PREVIEW: '' + ApiVersionPath.API_V2_URI
 });
 
 /***/ }),

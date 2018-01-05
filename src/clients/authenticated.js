@@ -186,7 +186,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getVisualizationLikes()
+   * client.getVisualizationLikes('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -204,7 +204,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getVisualizationLikesDetailed()
+   * client.getVisualizationLikesDetailed('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -221,7 +221,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.getVisualizationLike()
+   * client.getVisualizationLike('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -238,7 +238,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.likeVisualization()
+   * client.likeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -255,7 +255,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.unlikeVisualization()
+   * client.unlikeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -272,7 +272,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.unlikeVisualization()
+   * client.unlikeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -289,7 +289,7 @@ export const AuthenticatedClient = {
    *
    * @memberof CartoApiClient.AuthenticatedClient
    * @example
-   * client.unlikeVisualization()
+   * client.unlikeVisualization('vizID')
    *   .then(console.log)
    *   .catch(console.error);
    *
@@ -299,6 +299,32 @@ export const AuthenticatedClient = {
     const VIZ_PATH = `/${vizID}`;
 
     return this.put([Paths.VIZ, VIZ_PATH, ApiDataPath.WATCHING]);
+  },
+
+  /**
+   * Get a preview of a visualization
+   *
+   * @memberof CartoApiClient.AuthenticatedClient
+   * @example
+   * client.getVisualizationPreview('vizID', 200, 200)
+   *   .then(console.log)
+   *   .catch(console.error);
+   *
+   * @returns {Promise<object>} visualization image
+   */
+  getVisualizationPreview (vizID, width, height) {
+    const VIZ_PATH = `/${vizID}`;
+    const WIDTH_PATH = `/${width}`;
+    const HEIGHT_PATH = `/${height}`;
+
+    return this.get([
+      Paths.VIZ_PREVIEW,
+      VIZ_PATH,
+      ApiDataPath.STATIC,
+      WIDTH_PATH,
+      HEIGHT_PATH,
+      ApiDataPath.PNG_EXTENSION
+    ]);
   },
 
   getMap (mapID, params) {
