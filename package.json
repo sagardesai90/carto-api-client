@@ -1,6 +1,6 @@
 {
   "name": "carto-api-client",
-  "version": "0.0.9",
+  "version": "0.0.10",
   "description": "Client for the Builder backend API",
   "main": "dist/carto-api-client.js",
   "scripts": {
