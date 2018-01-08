@@ -355,7 +355,7 @@ var RequestUtils = exports.RequestUtils = {
     }).join('&');
   },
   getRelativeURIPath: function getRelativeURIPath(uriParts) {
-    return _general.Utils.isArray(uriParts) ? '' + uriParts.join('/') : '';
+    return _general.Utils.isArray(uriParts) ? '' + uriParts.join('') : '';
   },
   getPathFromHref: function getPathFromHref(href) {
     var regExp = href.match(USER_REGEX);
@@ -1272,10 +1272,10 @@ var AuthenticatedClient = exports.AuthenticatedClient = _extends({}, _public.Pub
    */
   getVisualizationPreview: function getVisualizationPreview(vizID, width, height) {
     var VIZ_PATH = '/' + vizID;
-    var WIDTH_PATH = '/' + width;
-    var HEIGHT_PATH = '/' + height;
+    var WIDTH = '/' + width;
+    var HEIGHT = '/' + height;
 
-    return this.get([_paths.Paths.VIZ_PREVIEW, VIZ_PATH, _paths.ApiDataPath.STATIC, WIDTH_PATH, HEIGHT_PATH, _paths.ApiDataPath.PNG_EXTENSION]);
+    return this.get([_paths.Paths.VIZ_PREVIEW, VIZ_PATH, _paths.ApiDataPath.STATIC, WIDTH, HEIGHT, _paths.ApiDataPath.PNG_EXTENSION]);
   },
   getMap: function getMap(mapID, params) {
     var MAP_PATH = '/' + mapID;
@@ -1321,7 +1321,7 @@ var Paths = exports.Paths = Object.freeze({
   TABLES: '' + ApiVersionPath.API_V1_URI + ApiDataPath.TABLES,
   VIZ: '' + ApiVersionPath.API_V1_URI + ApiDataPath.VIZ,
   MAPS: '' + ApiVersionPath.API_V1_URI + ApiDataPath.MAPS,
-  VIZ_PREVIEW: '' + ApiVersionPath.API_V2_URI
+  VIZ_PREVIEW: '' + ApiVersionPath.API_V2_URI + ApiDataPath.VIZ
 });
 
 /***/ }),

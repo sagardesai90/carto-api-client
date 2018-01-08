@@ -314,15 +314,15 @@ export const AuthenticatedClient = {
    */
   getVisualizationPreview (vizID, width, height) {
     const VIZ_PATH = `/${vizID}`;
-    const WIDTH_PATH = `/${width}`;
-    const HEIGHT_PATH = `/${height}`;
+    const WIDTH = `/${width}`;
+    const HEIGHT = `/${height}`;
 
     return this.get([
       Paths.VIZ_PREVIEW,
       VIZ_PATH,
       ApiDataPath.STATIC,
-      WIDTH_PATH,
-      HEIGHT_PATH,
+      WIDTH,
+      HEIGHT,
       ApiDataPath.PNG_EXTENSION
     ]);
   },

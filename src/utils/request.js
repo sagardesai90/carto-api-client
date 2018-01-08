@@ -31,7 +31,7 @@ export const RequestUtils = {
 
   getRelativeURIPath (uriParts) {
     return Utils.isArray(uriParts)
-      ? `${uriParts.join('/')}`
+      ? `${uriParts.join('')}`
       : '';
   },
 

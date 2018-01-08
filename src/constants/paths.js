@@ -24,5 +24,5 @@ export const Paths = Object.freeze({
   TABLES: `${ApiVersionPath.API_V1_URI}${ApiDataPath.TABLES}`,
   VIZ: `${ApiVersionPath.API_V1_URI}${ApiDataPath.VIZ}`,
   MAPS: `${ApiVersionPath.API_V1_URI}${ApiDataPath.MAPS}`,
-  VIZ_PREVIEW: `${ApiVersionPath.API_V2_URI}`
+  VIZ_PREVIEW: `${ApiVersionPath.API_V2_URI}${ApiDataPath.VIZ}`
 });
