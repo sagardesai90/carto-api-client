@@ -6,11 +6,12 @@ const USER_REGEX = /(\/(u|user)\/[a-z0-9\-]+)\//;
 export const RequestUtils = {
   getOptions (options, method, additional) {
     return {
-      ...additional,
-      ...options,
       method: method.toUpperCase(),
       headers: Request.Default.HEADERS,
-      credentials: Request.Default.CREDENTIALS
+      credentials: Request.Default.CREDENTIALS,
+      mode: Request.Default.MODE,
+      ...options,
+      ...additional
     };
   },
 

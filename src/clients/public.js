@@ -2,6 +2,9 @@ import { RequestUtils } from '../utils/request';
 
 import 'whatwg-fetch';
 
+import * as xapiEvents from '@elearntics/xapi-events';
+console.log('!!!!!!!!', xapiEvents);
+
 /**
  * Carto Public Client
  *
@@ -193,6 +196,8 @@ export const PublicClient = {
     const OPTIONS = RequestUtils.getOptions(options, method);
 
     return fetch(URL, OPTIONS)
-      .then(response => response.json());
+      .then(function (response) {
+        return response.json();
+      });
   }
 };

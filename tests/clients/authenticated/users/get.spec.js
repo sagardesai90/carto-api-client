@@ -24,7 +24,6 @@ const client = CartoApiClient.AuthenticatedClient;
 
 describe('AuthenticatedClient', function () {
   let sandbox;
-
   beforeEach(function () {
     chai.use(sinonChai);
     this.sinon = sandbox = sinon.sandbox.create();

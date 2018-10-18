@@ -9,7 +9,7 @@ export const ApiDataPath = Object.freeze({
   LIKES_DETAILED: '/likes/detailed',
   WATCHING: '/watching',
   STATIC: '/static',
-  PNG_EXTENSION: '.png'
+  PNG_EXTENSION: 'png'
 });
 
 export const ApiVersionPath = Object.freeze({

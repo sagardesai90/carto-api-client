@@ -55,6 +55,7 @@
     "yargs": "^9.0.1"
   },
   "dependencies": {
+    "@elearntics/xapi-events": "^0.2.0",
     "whatwg-fetch": "^2.0.3"
   }
 }

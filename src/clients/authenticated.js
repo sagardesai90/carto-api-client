@@ -316,6 +316,7 @@ export const AuthenticatedClient = {
     const VIZ_PATH = `/${vizID}`;
     const WIDTH = `/${width}`;
     const HEIGHT = `/${height}`;
+    const EXTENSION = `.${ApiDataPath.PNG_EXTENSION}`;
 
     return this.get([
       Paths.VIZ_PREVIEW,
@@ -323,8 +324,14 @@ export const AuthenticatedClient = {
       ApiDataPath.STATIC,
       WIDTH,
       HEIGHT,
-      ApiDataPath.PNG_EXTENSION
-    ]);
+      EXTENSION
+    ], {
+      headers: {
+        'Accept': `image/${ApiDataPath.PNG_EXTENSION}`,
+        'Cache': 'no-cache'
+      },
+      mode: 'no-cors'
+    });
   },
 
   getMap (mapID, params) {

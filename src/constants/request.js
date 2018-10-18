@@ -5,6 +5,7 @@ export const Request = Object.freeze({
       'Content-Type': 'application/json; charset=utf-8',
       'Cache': 'no-cache'
     }),
-    CREDENTIALS: 'include'
+    CREDENTIALS: 'include',
+    MODE: 'cors'
   })
 });
